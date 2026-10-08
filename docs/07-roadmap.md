@@ -20,6 +20,9 @@
 - [ ] IA liberada só com o passe da tag (assinado, 2 h)
 - [ ] Login opcional só para extras (nunca obrigatório)
 
+## Acessibilidade
+- [ ] Voltar com Libras (VLibras) carregado de forma isolada, sem mexer no HTML do app
+
 ## Depois
 - [ ] Integração com o app oficial do REC'n'Play, como módulo dentro dele
 - [ ] **Servidor MCP** (`/api/mcp`) com as 4 ferramentas do agente: Claude, apps do ChatGPT e Gemini CLI. Quem paga a IA é o assistente do usuário

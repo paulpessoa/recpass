@@ -61,7 +61,7 @@ flowchart LR
 
 - Reconhecimento e síntese de voz do próprio navegador (Web Speech API), em pt-BR e a custo zero.
 - Chamada contínua (ouvir → responder → ouvir) com cota de **3 min a cada 2 h**.
-- **VLibras**, o widget oficial do governo, para tradução em Libras.
+- **VLibras: removido por enquanto (8/out).** O widget altera o HTML da página por conta própria e é o principal suspeito das quebras no React. Para voltar, precisa carregar isolado (por exemplo, num iframe ou só quando a pessoa pedir).
 - Selos nas atividades: Libras, audiodescrição, legenda, andar com ou sem elevador, rampa, acesso lateral, prédio sem acessibilidade.
 
 ## Dados

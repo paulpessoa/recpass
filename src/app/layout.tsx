@@ -25,23 +25,13 @@ export const viewport: Viewport = {
   themeColor: "#123b8c",
 };
 
-// VLibras e service worker entram fora da árvore do React: o widget mexe no DOM por conta própria.
+// Registro do service worker (PWA), fora da árvore do React.
 const BOOT = `
 (function () {
   if ("serviceWorker" in navigator) {
     var reg = function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); };
     if (document.readyState === "complete") reg(); else window.addEventListener("load", reg);
   }
-  function vlibras() {
-    if (!window.VLibras) return setTimeout(vlibras, 500);
-    if (document.querySelector("[vw]")) return;
-    var root = document.createElement("div");
-    root.setAttribute("vw", ""); root.className = "enabled";
-    root.innerHTML = '<div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
-    document.body.appendChild(root);
-    new window.VLibras.Widget("https://vlibras.gov.br/app");
-  }
-  vlibras();
 })();
 `;
 
@@ -50,7 +40,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         {children}
-        <Script src="https://vlibras.gov.br/app/vlibras-plugin.js" strategy="afterInteractive" />
         <Script id="boot" strategy="afterInteractive">
           {BOOT}
         </Script>

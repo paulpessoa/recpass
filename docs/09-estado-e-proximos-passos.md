@@ -21,7 +21,7 @@
   - Começa pelo **diagnóstico em 4 toques**, sem IA: arquétipos Chico Science, Ariano, Nassau, Paulo Freire, Naná e Clarice.
   - Um roteador econômico responde o óbvio sem IA; o Gemini fica só para conversa aberta.
   - Cada resposta termina com atalhos para a lista filtrada (`/?ids=`) e para o mapa.
-- **Voz:** chamada flutuante com cota de 3 min a cada 2 h (controlada no navegador), mais VLibras.
+- **Voz:** chamada flutuante com cota de 3 min a cada 2 h (controlada no navegador). O VLibras foi removido por enquanto.
 - **Painel `/org`:** mapa de calor, destaque de polos vazios (só reordena o que já combina com o perfil), auto-equilíbrio, check-ins ao vivo e relógio da simulação.
 - **Tags `/tags`:** gravar, ler e **limpar** pelo Chrome Android. As NTAG213 são regraváveis; nunca use "Bloquear tag" no NFC Tools.
 - **PWA:** instalável, abre sem internet. O app **não usa GPS**: a posição vem da última tag lida.
@@ -61,7 +61,7 @@
 
 ## Bugs em aberto
 
-- **"This page couldn't load" no `/agente` ao receber a resposta.** Acontece no Chrome real do Paul, inclusive na emulação de iPhone, mas não num navegador limpo nem localmente. Suspeitas: extensão do Chrome ou VLibras mexendo no HTML. Agora existe o `src/app/error.tsx`, que mostra a mensagem real: reproduzir e ler o erro. Testar também numa janela anônima, sem extensões.
+- **"This page couldn't load" no `/agente` ao receber a resposta.** Acontece no Chrome real do Paul, inclusive na emulação de iPhone, mas não num navegador limpo nem localmente. O erro acontece também ao voltar para a home e cai na tela **global**, ou seja, no layout raiz. Ação tomada: o VLibras, principal suspeito, foi removido, e foram criados o `src/app/error.tsx` e o `src/app/global-error.tsx`, que mostram a mensagem real. Se voltar a quebrar, ler a mensagem na tela. Testar também numa janela anônima, sem extensões.
 - **Gemini 429 (cota excedida):** a chave atingiu o limite do plano gratuito. O app cai no modo regras. Para ter IA de novo: ativar cobrança no projeto do Google AI Studio ou esperar a cota renovar.
 
 ## Próximos passos de produto
