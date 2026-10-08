@@ -6,8 +6,8 @@ import { Map } from "@/components/Map";
 import { RouteSummary } from "@/components/RouteSummary";
 import { MOBILITY_LABEL, VENUES, venueById, type Mobility } from "@/lib/data";
 import { useLocation, useProfile, useShared } from "@/lib/client";
-import { computeRoute, mobilityList, profileMobility, venueHeat } from "@/lib/engine";
-import { VenueSheet } from "@/components/VenueSheet";
+import { activityAt, activityFill, computeRoute, festivalNow, fillStatus, mobilityList, profileMobility, venueHeat } from "@/lib/engine";
+import { Battery } from "@/components/Battery";
 
 export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | null; initialTo: string | null }) {
   const { state, at } = useShared();
@@ -23,13 +23,15 @@ export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | n
   const heat = Object.fromEntries(VENUES.map((v) => [v.id, venueHeat(v.id, state, at)]));
   const route = to && to !== from ? computeRoute(from, to, mobility, (id) => heat[id] ?? 0) : null;
   const target = to ? venueById(to) : null;
+  const act = target ? activityAt(target.id, state, at) : null;
+  const now = festivalNow(state, at);
 
   return (
     <AppShell>
       <div className="mb-3 grid grid-cols-2 gap-2 text-xs">
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-muted">Saindo de</span>
-          <select value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-xl bg-card p-2 ring-1 ring-white/10">
+          <span className="font-semibold text-gray-600">Saindo de</span>
+          <select value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-xl bg-white p-2 ring-1 ring-black/10">
             {VENUES.map((v) => (
               <option key={v.id} value={v.id}>
                 {v.short}
@@ -38,8 +40,8 @@ export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | n
           </select>
         </label>
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-muted">Indo para</span>
-          <select value={to ?? ""} onChange={(e) => setTo(e.target.value || null)} className="rounded-xl bg-card p-2 ring-1 ring-white/10">
+          <span className="font-semibold text-gray-600">Indo para</span>
+          <select value={to ?? ""} onChange={(e) => setTo(e.target.value || null)} className="rounded-xl bg-white p-2 ring-1 ring-black/10">
             <option value="">Toque no mapa…</option>
             {VENUES.map((v) => (
               <option key={v.id} value={v.id}>
@@ -54,48 +56,49 @@ export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | n
           <button
             key={m}
             onClick={() => toggleMobility(m)}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${mobility.includes(m) ? "bg-accent text-background" : "bg-card text-foreground/85 ring-1 ring-white/10"}`}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${mobility.includes(m) ? "bg-[#123b8c] text-white" : "bg-white text-gray-700 ring-1 ring-black/10"}`}
           >
             {MOBILITY_LABEL[m].icon} {MOBILITY_LABEL[m].label}
           </button>
         ))}
       </div>
 
-      <div className="relative -mx-4 h-[calc(100dvh-19rem)] min-h-[380px] overflow-hidden">
-        <Map heat={heat} route={route} here={from} selected={to} boosted={Object.keys(state.boosts)} onSelect={(id) => (id === from ? null : setTo(id))} height="100%" rounded={false} />
-        {target && (
-          <VenueSheet venueId={target.id} state={state} at={at} onClose={() => setTo(null)}>
-            {route?.ok && (
-              <p className="mt-3 text-sm font-semibold text-foreground">
-                <span className="text-accent">{route.minutes} min</span> a pé · {Math.round(route.meters)} m · detalhes abaixo
-              </p>
-            )}
-            <p className="mt-2 text-xs text-muted">{target.amenities.join(" · ")}</p>
-          </VenueSheet>
-        )}
-      </div>
+      <Map heat={heat} route={route} here={from} boosted={Object.keys(state.boosts)} onSelect={(id) => (id === from ? null : setTo(id))} />
 
-      <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-muted">
+      <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-gray-600">
         <span>
-          <b className="text-route">━</b> piso liso
+          <b className="text-blue-600">━</b> piso liso
         </span>
         <span>
-          <b className="text-[#FF8A00]">┅</b> paralelepípedo
+          <b className="text-orange-600">┅</b> paralelepípedo
         </span>
         <span>
-          <b className="text-enchendo">┈</b> calçada estreita
+          <b className="text-yellow-600">┈</b> calçada estreita
         </span>
         <span>
-          <b className="text-lotado">┈</b> degraus
+          <b className="text-red-600">┈</b> degraus
         </span>
-        <span>
-          <b className="text-livre">●</b> livre <b className="text-enchendo">●</b> enchendo <b className="text-lotado">●</b> lotado
-        </span>
+        <span>● cor = aglomeração</span>
       </div>
 
       <div className="mt-4 space-y-3">
         {route && <RouteSummary route={route} mobility={mobility} />}
-        {!to && <p className="text-center text-sm text-muted">Toque em um local no mapa para traçar a rota.</p>}
+        {target && (
+          <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5">
+            <h3 className="font-semibold">{target.name}</h3>
+            <p className="text-xs text-gray-500">Movimento no entorno: {Math.round(heat[target.id])}%</p>
+            {act && (
+              <div className="mt-2">
+                <p className="text-sm">
+                  {act.start} · {act.title}
+                </p>
+                <Battery fill={activityFill(act, state, at)} status={fillStatus(activityFill(act, state, at), act, now)} capacity={act.capacity} compact />
+              </div>
+            )}
+            <p className="mt-2 text-xs text-gray-600">{target.amenities.join(" · ")}</p>
+          </div>
+        )}
+        {!to && <p className="text-center text-sm text-gray-500">Toque em um local no mapa para traçar a rota.</p>}
       </div>
     </AppShell>
   );

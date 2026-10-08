@@ -9,15 +9,15 @@ import { PLACES, TOPICS, VIBES, profileFromQuiz, toggleMobility } from "@/lib/qu
 type Step = "mob" | "vibe" | "place" | "topics";
 
 const Bubble = ({ children }: { children: React.ReactNode }) => (
-  <div className="max-w-[88%] rounded-2xl bg-card px-3.5 py-2.5 text-sm shadow-sm ring-1 ring-white/10">{children}</div>
+  <div className="max-w-[88%] rounded-2xl bg-white px-3.5 py-2.5 text-sm shadow-sm ring-1 ring-black/5">{children}</div>
 );
 const Mine = ({ children }: { children: React.ReactNode }) => (
   <div className="flex justify-end">
-    <div className="max-w-[88%] rounded-2xl bg-accent px-3.5 py-2.5 text-sm text-background">{children}</div>
+    <div className="max-w-[88%] rounded-2xl bg-[#123b8c] px-3.5 py-2.5 text-sm text-white">{children}</div>
   </div>
 );
 const Chip = ({ on, onClick, children }: { on?: boolean; onClick: () => void; children: React.ReactNode }) => (
-  <button onClick={onClick} className={`rounded-full px-3 py-1.5 text-xs font-medium ring-1 ${on ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+  <button onClick={onClick} className={`rounded-full px-3 py-1.5 text-xs font-medium ring-1 ${on ? "bg-[#f26b1d] text-white ring-[#f26b1d]" : "bg-white ring-black/10"}`}>
     {children}
   </button>
 );
@@ -42,7 +42,7 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
       </Bubble>
 
       <Bubble>
-        <b>1. Como você vai circular hoje?</b> <span className="text-muted">(marque tudo o que se aplica)</span>
+        <b>1. Como você vai circular hoje?</b> <span className="text-gray-500">(marque tudo o que se aplica)</span>
       </Bubble>
       {done.includes("mob") ? (
         <Mine>{mobilities.map((m) => `${MOBILITY_LABEL[m].icon} ${MOBILITY_LABEL[m].label}`).join(" + ")}</Mine>
@@ -53,7 +53,7 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
               {MOBILITY_LABEL[m].icon} {MOBILITY_LABEL[m].label}
             </Chip>
           ))}
-          <button disabled={!mobilities.length} onClick={() => setStep("vibe")} className="rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-background disabled:opacity-40">
+          <button disabled={!mobilities.length} onClick={() => setStep("vibe")} className="rounded-full bg-[#123b8c] px-4 py-1.5 text-xs font-bold text-white disabled:opacity-40">
             Pronto →
           </button>
         </div>
@@ -62,7 +62,7 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
       {step !== "mob" && (
         <>
           <Bubble>
-            <b>2. Num festival, você é de…</b> <span className="text-muted">(pode marcar mais de uma)</span>
+            <b>2. Num festival, você é de…</b> <span className="text-gray-500">(pode marcar mais de uma)</span>
           </Bubble>
           {done.includes("vibe") ? (
             <Mine>{vibes.map((i) => VIBES[i].label).join(" · ")}</Mine>
@@ -73,7 +73,7 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
                   {v.label}
                 </Chip>
               ))}
-              <button disabled={!vibes.length} onClick={() => setStep("place")} className="rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-background disabled:opacity-40">
+              <button disabled={!vibes.length} onClick={() => setStep("place")} className="rounded-full bg-[#123b8c] px-4 py-1.5 text-xs font-bold text-white disabled:opacity-40">
                 Pronto →
               </button>
             </div>
@@ -109,7 +109,7 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
       {step === "topics" && (
         <>
           <Bubble>
-            <b>4. O que te interessa?</b> <span className="text-muted">(opcional)</span>
+            <b>4. O que te interessa?</b> <span className="text-gray-500">(opcional)</span>
           </Bubble>
           <div className="flex flex-wrap gap-2">
             {TOPICS.map((t) => (
@@ -117,14 +117,14 @@ export function AgentOnboarding({ intro, onDone }: { intro?: string; onDone: (p:
                 {t}
               </Chip>
             ))}
-            <button onClick={finish} className="rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-background">
+            <button onClick={finish} className="rounded-full bg-[#f26b1d] px-4 py-1.5 text-xs font-bold text-white">
               Ver meu perfil ✨
             </button>
           </div>
         </>
       )}
 
-      <details className="text-xs text-muted">
+      <details className="text-xs text-gray-500">
         <summary className="cursor-pointer">Pular e usar uma conta demo</summary>
         <div className="mt-2 flex flex-wrap gap-2">
           {PERSONAS.map((p) => (

@@ -25,7 +25,6 @@
 - **Painel `/org`:** mapa de calor, destaque de polos vazios (só reordena o que já combina com o perfil), auto-equilíbrio, check-ins ao vivo e relógio da simulação.
 - **Tags `/tags`:** gravar, ler e **limpar** pelo Chrome Android. As NTAG213 são regraváveis; nunca use "Bloquear tag" no NFC Tools.
 - **Feedback (`app_feedback`):** botão 📝 em todas as telas do app; o pop-up abre sozinho uma vez após ~2,5 min de uso, ou direto com `?feedback=1` (ex.: `/t/nerd-terreo?feedback=1`). Nota 1–5 obrigatória; NPS, "usaria?", destaques, o que faltou, área e contato opcional com consentimento. Ler no Table Editor do Supabase (não há leitura pública: o repositório é aberto).
-- **Identidade visual (8/out, pedido da designer):** tema escuro único (Preto Asfalto `#121212`, Branco Papel `#F5F5F5`), Amarelo Rec `#FFCC00` nas ações, Azul Capibaribe `#0055FF` em rotas e links, Magenta Mangue `#FF007F` só para a tag NFC, semáforo `#00C853` / `#FFEA00` / `#D50000`. Fonte Inter com as classes `t-h1`, `t-h2`, `t-body` e `t-micro` (`globals.css`). A tag abre no **mapa** ("mapa primeiro"), com alternância Mapa/Cards e, nos cards, Títulos/Palestrantes. Os pins são pílulas na cor do semáforo, sem rótulo fixo e agrupados ao tirar o zoom; o nome e a lotação exata só aparecem no cartão que sobe da base (`VenueSheet`), ao tocar no pin ou ao ler a tag. O campo `speakers` das atividades está vazio até sair a programação oficial.
 - **PWA:** instalável, abre sem internet. O app **não usa GPS**: a posição vem da última tag lida.
 
 ## Decisões tomadas (e o porquê)

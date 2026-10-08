@@ -5,8 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { ActivityCard } from "@/components/ActivityCard";
 import { AgentChat } from "@/components/AgentChat";
-import { Map } from "@/components/Map";
-import { RouteButton, VenueSheet } from "@/components/VenueSheet";
 import { ACTIVITIES, VENUES, tagById, venueById } from "@/lib/data";
 import { act, speak, stopSpeaking, useGuide, useLocation, useProfile, useShared } from "@/lib/client";
 import { HERITAGE } from "@/lib/heritage";
@@ -22,10 +20,6 @@ export function TagLanding({ id }: { id: string }) {
   const [guide, setGuide] = useGuide();
   const [playing, setPlaying] = useState(false);
   const story = HERITAGE[venue.id];
-  // Experiência "mapa primeiro": abre no mapa com o cartão do local onde a pessoa encostou a tag.
-  const [view, setView] = useState<"mapa" | "cards">("mapa");
-  const [selected, setSelected] = useState<string | null>(venue.id);
-  const [headline, setHeadline] = useState<"titulo" | "palestrante">("titulo");
 
   useEffect(() => {
     if (registered.current) return;
@@ -65,77 +59,18 @@ export function TagLanding({ id }: { id: string }) {
 
   return (
     <AppShell>
-      <div className="mb-3 flex items-center gap-2">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-nfc/15 py-1 pl-1 pr-3 ring-1 ring-nfc/40">
-          <span className="nfc-pulse relative grid h-7 w-7 shrink-0 place-items-center rounded-full bg-nfc text-sm text-white">📶</span>
-          <span className="min-w-0">
-            <span className="t-micro block text-nfc">Tag lida</span>
-            <span className="block truncate text-sm font-semibold leading-tight">{tag.label}</span>
-          </span>
+      <section className="relative mb-4 overflow-hidden rounded-2xl bg-[#123b8c] p-5 text-white">
+        <div className="flex items-center gap-4">
+          <div className="nfc-pulse relative grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white/15 text-2xl text-[#f26b1d]">📶</div>
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-wide text-white/70">Check-in de contexto</p>
+            <h1 className="text-xl font-bold leading-tight">{tag.label}</h1>
+            <p className="text-xs text-white/80">
+              Movimento no entorno: {Math.round(heat(venue.id))}% · sem GPS, sem baixar app
+            </p>
+          </div>
         </div>
-        <div role="tablist" aria-label="Visualização" className="flex shrink-0 rounded-full bg-card p-1 ring-1 ring-white/10">
-          {(["mapa", "cards"] as const).map((v) => (
-            <button
-              key={v}
-              role="tab"
-              aria-selected={view === v}
-              onClick={() => setView(v)}
-              className={`t-micro rounded-full px-3 py-1.5 ${view === v ? "bg-accent text-background" : "text-muted"}`}
-            >
-              {v === "mapa" ? "🗺️ Mapa" : "🃏 Cards"}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {view === "mapa" && (
-        <div className="relative -mx-4 h-[calc(100dvh-13.5rem)] min-h-[420px] overflow-hidden">
-          <Map
-            heat={Object.fromEntries(VENUES.map((v) => [v.id, heat(v.id)]))}
-            here={venue.id}
-            selected={selected}
-            boosted={Object.keys(state.boosts)}
-            onSelect={setSelected}
-            height="100%"
-            rounded={false}
-          />
-          {selected && (
-            <VenueSheet venueId={selected} here={venue.id} state={state} at={at} onClose={() => setSelected(null)}>
-              {selected === venue.id && tag.kind === "escadaria" && (
-                <p className="mt-3 rounded-xl bg-enchendo/10 px-3 py-2 text-sm text-enchendo ring-1 ring-enchendo/40">⚠️ Esta entrada tem degraus. {venue.universalAccess}</p>
-              )}
-              <div className="mt-3 flex flex-wrap gap-2">
-                {selected === venue.id ? (
-                  <button onClick={() => setView("cards")} className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background">
-                    {full ? "Ver alternativas" : "Ver programação daqui"}
-                  </button>
-                ) : (
-                  <RouteButton from={venue.id} to={selected} />
-                )}
-                <a href="#agente" onClick={() => setView("cards")} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">
-                  💬 Agente
-                </a>
-              </div>
-            </VenueSheet>
-          )}
-        </div>
-      )}
-
-      {view === "cards" && (
-        <>
-      <div role="tablist" aria-label="Destaque dos cartões" className="mb-4 flex rounded-full bg-card p-1 ring-1 ring-white/10">
-        {(["titulo", "palestrante"] as const).map((h) => (
-          <button
-            key={h}
-            role="tab"
-            aria-selected={headline === h}
-            onClick={() => setHeadline(h)}
-            className={`t-micro flex-1 rounded-full py-1.5 ${headline === h ? "bg-white/15 text-foreground" : "text-muted"}`}
-          >
-            {h === "titulo" ? "Títulos" : "Palestrantes"}
-          </button>
-        ))}
-      </div>
+      </section>
 
       {guide && story && (
         <section className="mb-4 overflow-hidden rounded-2xl bg-[#2b2118] text-amber-50 shadow-sm">
@@ -168,17 +103,17 @@ export function TagLanding({ id }: { id: string }) {
       )}
 
       {tag.note && tag.kind !== "escadaria" && (
-        <section className="mb-4 rounded-2xl bg-sky-400/10 p-4 text-sm text-sky-200 ring-1 ring-sky-400/30">
+        <section className="mb-4 rounded-2xl bg-sky-50 p-4 text-sm text-sky-900 ring-1 ring-sky-200">
           ℹ️ {tag.note}
-          {venue.vertical && <span className="mt-1 block text-xs text-sky-200">Circulação: {venue.vertical.join(", ")}.</span>}
+          {venue.vertical && <span className="mt-1 block text-xs text-sky-800">Circulação: {venue.vertical.join(", ")}.</span>}
         </section>
       )}
 
       {tag.kind === "escadaria" && (
-        <section className="mb-4 rounded-2xl border-2 border-amber-400 bg-amber-400/10 p-4">
-          <h2 className="font-bold text-amber-200">⚠️ Esta entrada tem degraus</h2>
-          <p className="mt-1 text-sm text-amber-200">{venue.universalAccess}</p>
-          {tag.note && <p className="mt-2 text-xs text-amber-200">{tag.note}</p>}
+        <section className="mb-4 rounded-2xl border-2 border-amber-400 bg-amber-50 p-4">
+          <h2 className="font-bold text-amber-900">⚠️ Esta entrada tem degraus</h2>
+          <p className="mt-1 text-sm text-amber-900">{venue.universalAccess}</p>
+          {tag.note && <p className="mt-2 text-xs text-amber-800">{tag.note}</p>}
           {!venue.accessible && (
             <Link href="/mapa?from=senai&to=armazens" className="mt-3 inline-block rounded-full bg-amber-600 px-3 py-1.5 text-xs font-bold text-white">
               Ver rota até a transmissão acessível
@@ -188,9 +123,9 @@ export function TagLanding({ id }: { id: string }) {
       )}
 
       {tag.kind === "hub" && (
-        <section className="mb-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-white/10">
+        <section className="mb-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5">
           <h2 className="font-bold">🚕 Ponto de embarque</h2>
-          <p className="mt-1 text-sm text-muted">Peça o carro com destino exato aqui: fica fora do bloqueio das pontes, então o motorista não cancela.</p>
+          <p className="mt-1 text-sm text-gray-600">Peça o carro com destino exato aqui: fica fora do bloqueio das pontes, então o motorista não cancela.</p>
           <ul className="mt-3 space-y-1.5 text-sm">
             {hubs.map(({ v, h, r }) => (
               <li key={v.id} className="flex justify-between">
@@ -198,7 +133,7 @@ export function TagLanding({ id }: { id: string }) {
                   {v.id === venue.id ? "📍 " : ""}
                   {v.short}
                 </span>
-                <span className="text-xs text-muted">
+                <span className="text-xs text-gray-500">
                   {Math.round(h)}% cheio{v.id !== venue.id && r.ok ? ` · ${r.minutes} min a pé` : ""}
                 </span>
               </li>
@@ -208,12 +143,12 @@ export function TagLanding({ id }: { id: string }) {
       )}
 
       {tag.kind === "encontro" && (
-        <section className="mb-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-white/10">
+        <section className="mb-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5">
           <h2 className="font-bold">👋 Ponto de encontro</h2>
-          <p className="mt-1 text-sm text-muted">Mande este ponto pro seu grupo: cada um recebe a rota adaptada até aqui.</p>
+          <p className="mt-1 text-sm text-gray-600">Mande este ponto pro seu grupo: cada um recebe a rota adaptada até aqui.</p>
           <button
             onClick={() => navigator.share?.({ title: "Me encontra aqui", text: `Tô no ${tag.label}`, url: location.href })}
-            className="mt-3 rounded-full bg-accent px-4 py-2 text-sm font-bold text-background"
+            className="mt-3 rounded-full bg-[#f26b1d] px-4 py-2 text-sm font-bold text-white"
           >
             Compartilhar com o grupo
           </button>
@@ -223,17 +158,17 @@ export function TagLanding({ id }: { id: string }) {
       {current && tag.kind !== "hub" && tag.kind !== "encontro" && (
         <section className="mb-4">
           {full && (
-            <div className="mb-2 rounded-xl bg-lotado px-3 py-2 text-sm font-bold text-white">
+            <div className="mb-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-bold text-white">
               {status?.key === "lotado" ? "Lotou! Mas calma, tem coisa boa perto." : "Últimas vagas — corra ou veja alternativas."}
             </div>
           )}
-          <h2 className="mb-2 text-sm font-semibold text-muted">{now >= actStart(current) ? "Acontecendo aqui agora" : "Próxima aqui"}</h2>
-          <ActivityCard a={current} state={state} at={at} profile={profile} from={venue.id} headline={headline} />
+          <h2 className="mb-2 text-sm font-semibold text-gray-600">{now >= actStart(current) ? "Acontecendo aqui agora" : "Próxima aqui"}</h2>
+          <ActivityCard a={current} state={state} at={at} profile={profile} from={venue.id} />
         </section>
       )}
 
       {!profile && (
-        <a href="#agente" className="mb-4 flex items-center gap-3 rounded-2xl bg-accent p-3 text-sm text-background">
+        <a href="#agente" className="mb-4 flex items-center gap-3 rounded-2xl bg-[#f26b1d] p-3 text-sm text-white">
           <span className="text-2xl">💬</span>
           <span>
             <b className="block">Ainda não te conheço 🙂</b>
@@ -247,7 +182,7 @@ export function TagLanding({ id }: { id: string }) {
           <h2 className="mb-2 text-lg font-bold">{full ? "Alternativas a partir daqui" : "Daqui, combina com você"}</h2>
           <div className="space-y-3">
             {recs.map((r) => (
-              <ActivityCard key={r.activity.id} a={r.activity} state={state} at={at} profile={profile} from={venue.id} reasons={r.reasons} eta={r.etaMin} balanced={r.balanced} headline={headline} />
+              <ActivityCard key={r.activity.id} a={r.activity} state={state} at={at} profile={profile} from={venue.id} reasons={r.reasons} eta={r.etaMin} balanced={r.balanced} />
             ))}
           </div>
         </section>
@@ -257,8 +192,6 @@ export function TagLanding({ id }: { id: string }) {
         <h2 className="mb-2 text-lg font-bold">Fale com o agente</h2>
         <AgentChat key={`${profile?.name ?? "anon"}-${tag.id}`} greeting={greeting} />
       </section>
-        </>
-      )}
     </AppShell>
   );
 }

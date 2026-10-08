@@ -25,10 +25,10 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col">
-      <header className="sticky top-0 z-[1000] border-b border-white/10 bg-background/95 px-4 pb-3 pt-3 text-foreground backdrop-blur">
+      <header className="sticky top-0 z-[1000] bg-[#123b8c] px-4 pb-3 pt-3 text-white shadow">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-accent text-base font-black">R</span>
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-[#f26b1d] text-base font-black">R</span>
             <span className="leading-tight">
               <span className="block text-sm font-bold">RecPass</span>
               <span className="block text-[10px] opacity-80">REC&apos;n&apos;Play · Bairro do Recife</span>
@@ -48,14 +48,14 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
       </header>
 
       <main className="flex-1 px-4 pb-24 pt-4">
-        {title && <h1 className="t-h1 mb-3">{title}</h1>}
+        {title && <h1 className="mb-3 text-xl font-bold">{title}</h1>}
         {mounted ? (
           children
         ) : (
           <div className="space-y-3" aria-busy="true">
-            <div className="h-28 animate-pulse rounded-2xl bg-card" />
-            <div className="h-40 animate-pulse rounded-2xl bg-card" />
-            <div className="h-40 animate-pulse rounded-2xl bg-card" />
+            <div className="h-28 animate-pulse rounded-2xl bg-white" />
+            <div className="h-40 animate-pulse rounded-2xl bg-white" />
+            <div className="h-40 animate-pulse rounded-2xl bg-white" />
           </div>
         )}
       </main>
@@ -63,7 +63,7 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
       {mounted && <VoiceCall />}
       {mounted && <FeedbackPrompt />}
 
-      <nav className="fixed inset-x-0 bottom-0 z-[1000] mx-auto max-w-md border-t border-white/10 bg-card/95 backdrop-blur">
+      <nav className="fixed inset-x-0 bottom-0 z-[1000] mx-auto max-w-md border-t border-black/5 bg-white/95 backdrop-blur">
         <ul className="grid grid-cols-4">
           {NAV.map((n) => {
             const active = n.href === "/" ? path === "/" : path.startsWith(n.href);
@@ -71,7 +71,7 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
               <li key={n.href}>
                 <Link
                   href={n.href}
-                  className={`flex flex-col items-center py-2 text-[11px] ${active ? "font-bold text-accent" : "text-muted"}`}
+                  className={`flex flex-col items-center py-2 text-[11px] ${active ? "font-bold text-[#123b8c]" : "text-gray-500"}`}
                 >
                   <span className="text-lg leading-none">{n.icon}</span>
                   {n.label}

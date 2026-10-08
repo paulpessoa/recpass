@@ -65,16 +65,16 @@ export default function TagsPage() {
 
   return (
     <div className="mx-auto max-w-2xl p-4">
-      <Link href="/org" className="text-sm text-accent">
+      <Link href="/org" className="text-sm text-[#123b8c]">
         ← Painel
       </Link>
       <h1 className="mt-2 text-2xl font-bold">Tags NFC</h1>
-      <p className="mt-1 text-sm text-muted">
-        Cada tag (NTAG213, 144 bytes) guarda só uma URL curta <code className="rounded bg-white/10 px-1">/t/&lt;id&gt;</code>. O que ela significa — local, andar,
+      <p className="mt-1 text-sm text-gray-600">
+        Cada tag (NTAG213, 144 bytes) guarda só uma URL curta <code className="rounded bg-gray-100 px-1">/t/&lt;id&gt;</code>. O que ela significa — local, andar,
         acessibilidade — fica no servidor e pode mudar sem regravar a tag.
       </p>
 
-      <div className={`mt-4 rounded-2xl p-4 text-sm ${nfc ? "bg-livre/10 text-emerald-300" : "bg-amber-400/10 text-amber-200"}`}>
+      <div className={`mt-4 rounded-2xl p-4 text-sm ${nfc ? "bg-emerald-50 text-emerald-900" : "bg-amber-50 text-amber-900"}`}>
         {nfc ? (
           <>
             <b>Web NFC disponível.</b> Toque em &quot;Gravar&quot; e encoste a tag nas costas do celular.
@@ -82,7 +82,7 @@ export default function TagsPage() {
               <button onClick={scan} className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white">
                 Ler uma tag
               </button>
-              <button onClick={clear} disabled={!!writing} className="rounded-full bg-lotado px-3 py-1 text-xs font-bold text-white disabled:opacity-50">
+              <button onClick={clear} disabled={!!writing} className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white disabled:opacity-50">
                 {writing === "__clear__" ? "Aproxime…" : "🧹 Limpar tag"}
               </button>
             </span>
@@ -99,25 +99,25 @@ export default function TagsPage() {
         {TAGS.map((t) => {
           const url = `${origin}/t/${t.id}`;
           return (
-            <li key={t.id} className="rounded-2xl bg-card p-3 shadow-sm ring-1 ring-white/10">
+            <li key={t.id} className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-black/5">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <b className="block text-sm">{t.label}</b>
-                  <span className="text-xs text-muted">
+                  <span className="text-xs text-gray-500">
                     {t.kind} · {venueById(t.venueId)?.short}
                   </span>
-                  <p className="mt-1 break-all font-mono text-[11px] text-muted">{url}</p>
+                  <p className="mt-1 break-all font-mono text-[11px] text-gray-600">{url}</p>
                 </div>
                 <div className="flex shrink-0 flex-col gap-1">
                   {nfc && (
-                    <button onClick={() => write(t.id)} disabled={!!writing} className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-background disabled:opacity-50">
+                    <button onClick={() => write(t.id)} disabled={!!writing} className="rounded-full bg-[#123b8c] px-3 py-1 text-xs font-bold text-white disabled:opacity-50">
                       {writing === t.id ? "Aproxime…" : "Gravar"}
                     </button>
                   )}
-                  <button onClick={() => navigator.clipboard.writeText(url).then(() => setStatus(`Copiado: ${url}`))} className="rounded-full bg-white/10 px-3 py-1 text-xs">
+                  <button onClick={() => navigator.clipboard.writeText(url).then(() => setStatus(`Copiado: ${url}`))} className="rounded-full bg-gray-100 px-3 py-1 text-xs">
                     Copiar
                   </button>
-                  <Link href={`/t/${t.id}`} className="rounded-full bg-white/10 px-3 py-1 text-center text-xs">
+                  <Link href={`/t/${t.id}`} className="rounded-full bg-gray-100 px-3 py-1 text-center text-xs">
                     Simular
                   </Link>
                 </div>

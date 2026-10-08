@@ -1,130 +1,34 @@
 @import "tailwindcss";
 
-/* Identidade visual (designer, 8/out): tema escuro único. */
 :root {
-  --background: #121212; /* Preto Asfalto */
-  --foreground: #f5f5f5; /* Branco Papel */
-  --card: #1e1e1e;
-  --card-2: #2a2a2a;
-  --muted: #a3a3a3;
-  --accent: #ffcc00; /* Amarelo Rec: ações e destaques */
-  --route: #0055ff; /* Azul Capibaribe: rotas, links e navegação */
-  --nfc: #ff007f; /* Magenta Mangue: só interações físicas (tag NFC) */
-  --livre: #00c853;
-  --enchendo: #ffea00;
-  --lotado: #d50000;
-  color-scheme: dark;
+  --background: #f6f3ee;
+  --foreground: #1b1f2a;
+  --brand: #123b8c;
+  --brand-2: #f26b1d;
+  --card: #ffffff;
+  --muted: #6b7280;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
   --color-card: var(--card);
-  --color-card-2: var(--card-2);
   --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-route: var(--route);
-  --color-nfc: var(--nfc);
-  --color-livre: var(--livre);
-  --color-enchendo: var(--enchendo);
-  --color-lotado: var(--lotado);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-/* Escala tipográfica */
-@utility t-h1 {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-@utility t-h2 {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.3;
-}
-@utility t-body {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-@utility t-micro {
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.3;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-select,
-input,
-textarea {
-  color-scheme: dark;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
 .leaflet-container {
   font-family: inherit;
-  background: #1a1a1a;
-}
-
-/* Tiles do OSM escurecidos no próprio navegador (sem chave de API) */
-.tiles-dark {
-  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
-}
-
-/* Com o cartão do mapa aberto, os botões flutuantes saem do caminho */
-body[data-sheet] .fab {
-  display: none;
-}
-
-/* Pins do mapa (divIcon): pílula preenchida pela cor do semáforo */
-.pin {
-  background: none;
-  border: none;
-}
-.pin-body {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 9999px;
-  border: 2px solid #121212;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
-  font-size: 12px;
-  font-weight: 700;
-  color: #121212;
-  transition: transform 0.15s;
-}
-.pin-selected .pin-body {
-  transform: scale(1.25);
-  border-color: #f5f5f5;
-}
-.pin-here .pin-body {
-  border-color: var(--nfc);
-  border-width: 3px;
-}
-.pin-hub .pin-body {
-  background: #f5f5f5 !important;
-}
-.pin-cluster .pin-body {
-  border-color: #f5f5f5;
-  font-size: 13px;
-}
-
-@keyframes sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-.sheet-up {
-  animation: sheet-up 0.22s ease-out;
 }
 
 @keyframes nfc-pulse {

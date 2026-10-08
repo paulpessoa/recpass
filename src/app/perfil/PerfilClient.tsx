@@ -34,23 +34,23 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
     const steps = [
       <div key="mob">
         <h2 className="text-lg font-bold">Como você vai circular hoje?</h2>
-        <p className="mb-3 text-sm text-muted">Marque tudo o que se aplica. Isso muda a rota, não o que você pode ver.</p>
+        <p className="mb-3 text-sm text-gray-600">Marque tudo o que se aplica. Isso muda a rota, não o que você pode ver.</p>
         <div className="grid gap-2">
           {(Object.keys(MOBILITY_LABEL) as Mobility[]).map((m) => (
-            <button key={m} onClick={() => setMobilities(toggleMobility(mobilities, m))} className={`rounded-xl p-3 text-left ring-1 ${mobilities.includes(m) ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+            <button key={m} onClick={() => setMobilities(toggleMobility(mobilities, m))} className={`rounded-xl p-3 text-left ring-1 ${mobilities.includes(m) ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
               <span className="mr-2">{MOBILITY_LABEL[m].icon}</span>
               <b>{MOBILITY_LABEL[m].label}</b>
-              <span className={`block text-xs ${mobilities.includes(m) ? "text-background/75" : "text-muted"}`}>{MOBILITY_LABEL[m].hint}</span>
+              <span className={`block text-xs ${mobilities.includes(m) ? "text-white/80" : "text-gray-500"}`}>{MOBILITY_LABEL[m].hint}</span>
             </button>
           ))}
         </div>
       </div>,
       <div key="vibe">
         <h2 className="text-lg font-bold">Num festival, você é de…</h2>
-        <p className="mb-3 text-sm text-muted">Pode marcar mais de uma.</p>
+        <p className="mb-3 text-sm text-gray-600">Pode marcar mais de uma.</p>
         <div className="grid gap-2">
           {VIBES.map((v, i) => (
-            <button key={v.label} onClick={() => setVibes(vibes.includes(i) ? vibes.filter((x) => x !== i) : [...vibes, i])} className={`rounded-xl p-3 text-left text-sm ring-1 ${vibes.includes(i) ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+            <button key={v.label} onClick={() => setVibes(vibes.includes(i) ? vibes.filter((x) => x !== i) : [...vibes, i])} className={`rounded-xl p-3 text-left text-sm ring-1 ${vibes.includes(i) ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
               {v.label}
             </button>
           ))}
@@ -60,7 +60,7 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
         <h2 className="mb-3 text-lg font-bold">Escolha um lugar do Recife</h2>
         <div className="grid gap-2">
           {PLACES.map((p) => (
-            <button key={p.id} onClick={() => setPlace(p.id)} className={`rounded-xl p-3 text-left text-sm ring-1 ${place === p.id ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+            <button key={p.id} onClick={() => setPlace(p.id)} className={`rounded-xl p-3 text-left text-sm ring-1 ${place === p.id ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
               {p.label}
             </button>
           ))}
@@ -68,10 +68,10 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
       </div>,
       <div key="topics">
         <h2 className="text-lg font-bold">O que te interessa?</h2>
-        <p className="mb-3 text-sm text-muted">Escolha quantos quiser.</p>
+        <p className="mb-3 text-sm text-gray-600">Escolha quantos quiser.</p>
         <div className="flex flex-wrap gap-2">
           {TOPICS.map((t) => (
-            <button key={t} onClick={() => toggle(topics, setTopics, t)} className={`rounded-full px-3 py-1.5 text-sm ring-1 ${topics.includes(t) ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+            <button key={t} onClick={() => toggle(topics, setTopics, t)} className={`rounded-full px-3 py-1.5 text-sm ring-1 ${topics.includes(t) ? "bg-[#f26b1d] text-white ring-[#f26b1d]" : "bg-white ring-black/10"}`}>
               {t}
             </button>
           ))}
@@ -79,34 +79,34 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
       </div>,
       <div key="needs">
         <h2 className="text-lg font-bold">Algo que ajude você?</h2>
-        <p className="mb-3 text-sm text-muted">Opcional e fica só no seu celular.</p>
+        <p className="mb-3 text-sm text-gray-600">Opcional e fica só no seu celular.</p>
         <div className="flex flex-wrap gap-2">
           {NEEDS.map((t) => (
-            <button key={t} onClick={() => toggle(needs, setNeeds, t)} className={`rounded-full px-3 py-1.5 text-sm ring-1 ${needs.includes(t) ? "bg-accent text-background ring-accent" : "bg-card ring-white/10"}`}>
+            <button key={t} onClick={() => toggle(needs, setNeeds, t)} className={`rounded-full px-3 py-1.5 text-sm ring-1 ${needs.includes(t) ? "bg-[#f26b1d] text-white ring-[#f26b1d]" : "bg-white ring-black/10"}`}>
               {t}
             </button>
           ))}
         </div>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome ou apelido (opcional)" className="mt-4 w-full rounded-xl bg-card p-3 text-sm ring-1 ring-white/10" />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome ou apelido (opcional)" className="mt-4 w-full rounded-xl bg-white p-3 text-sm ring-1 ring-black/10" />
       </div>,
     ];
     return (
       <AppShell>
         <div className="mb-3 flex gap-1">
           {steps.map((_, i) => (
-            <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-accent" : "bg-white/10"}`} />
+            <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-[#f26b1d]" : "bg-gray-200"}`} />
           ))}
         </div>
         {steps[step]}
         <div className="mt-5 flex gap-2">
           {step > 0 && (
-            <button onClick={() => setStep(step - 1)} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">
+            <button onClick={() => setStep(step - 1)} className="rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold">
               Voltar
             </button>
           )}
           <button
             onClick={() => (step < steps.length - 1 ? setStep(step + 1) : finish())}
-            className="flex-1 rounded-full bg-accent py-2 text-sm font-bold text-background"
+            className="flex-1 rounded-full bg-[#123b8c] py-2 text-sm font-bold text-white"
           >
             {step < steps.length - 1 ? "Continuar" : "Ver meu perfil"}
           </button>
@@ -118,7 +118,7 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
   return (
     <AppShell title="Seu perfil">
       {profile && arch && (
-        <section className="mb-5 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-white/10">
+        <section className="mb-5 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
           <div className="p-4 text-white" style={{ background: arch.color }}>
             <p className="text-xs uppercase tracking-wide opacity-80">Seu arquétipo REC&apos;n&apos;Play</p>
             <h2 className="text-2xl font-black">
@@ -129,17 +129,17 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
             </p>
           </div>
           <div className="p-4 text-sm">
-            <p className="text-foreground/85">{arch.description}</p>
-            <p className="mt-3 text-xs text-muted">
+            <p className="text-gray-700">{arch.description}</p>
+            <p className="mt-3 text-xs text-gray-500">
               {profile.avatar} {profile.name} · {mobilityText(profileMobility(profile))}
             </p>
-            {profile.interests.length > 0 && <p className="mt-1 text-xs text-muted">Interesses: {profile.interests.join(", ")}</p>}
-            {profile.needs.length > 0 && <p className="mt-1 text-xs text-muted">Necessidades: {profile.needs.join(", ")}</p>}
+            {profile.interests.length > 0 && <p className="mt-1 text-xs text-gray-500">Interesses: {profile.interests.join(", ")}</p>}
+            {profile.needs.length > 0 && <p className="mt-1 text-xs text-gray-500">Necessidades: {profile.needs.join(", ")}</p>}
             <div className="mt-4 flex gap-2">
-              <Link href="/" className="flex-1 rounded-full bg-accent py-2 text-center text-sm font-bold text-background">
+              <Link href="/" className="flex-1 rounded-full bg-[#123b8c] py-2 text-center text-sm font-bold text-white">
                 Ver o que combina comigo
               </Link>
-              <button onClick={() => setProfile(null)} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">
+              <button onClick={() => setProfile(null)} className="rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold">
                 Sair
               </button>
             </div>
@@ -147,19 +147,19 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
         </section>
       )}
 
-      <button onClick={() => setQuiz(true)} className="mb-2 w-full rounded-2xl bg-accent p-4 text-left text-background">
+      <button onClick={() => setQuiz(true)} className="mb-2 w-full rounded-2xl bg-[#f26b1d] p-4 text-left text-white">
         <b className="block">🧬 Fazer meu diagnóstico (1 min)</b>
         <span className="text-sm opacity-90">Descubra se você é Chico Science, Ariano Suassuna, Nassau…</span>
       </button>
-      <Link href="/agente?q=Quero%20montar%20meu%20perfil%20conversando" className="mb-6 block w-full rounded-2xl bg-card p-4 text-sm ring-1 ring-white/10">
+      <Link href="/agente?q=Quero%20montar%20meu%20perfil%20conversando" className="mb-6 block w-full rounded-2xl bg-white p-4 text-sm ring-1 ring-black/5">
         <b>💬 Prefiro conversar com o agente</b>
-        <span className="block text-muted">Ele faz 2 perguntas e já te sugere um roteiro.</span>
+        <span className="block text-gray-500">Ele faz 2 perguntas e já te sugere um roteiro.</span>
       </Link>
 
-      <label className="mb-6 flex items-center justify-between rounded-2xl bg-card p-4 text-sm ring-1 ring-white/10">
+      <label className="mb-6 flex items-center justify-between rounded-2xl bg-white p-4 text-sm ring-1 ring-black/5">
         <span>
           <b className="block">🎧 Modo guia do patrimônio</b>
-          <span className="text-muted">Ao tocar numa tag, conta a história do prédio em 30s.</span>
+          <span className="text-gray-500">Ao tocar numa tag, conta a história do prédio em 30s.</span>
         </span>
         <input type="checkbox" className="h-5 w-5" checked={guide} onChange={(e) => setGuide(e.target.checked)} />
       </label>
@@ -170,14 +170,14 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
           <button
             key={p.id}
             onClick={() => setProfile(profileFromPersona(p))}
-            className={`flex w-full items-start gap-3 rounded-2xl bg-card p-3 text-left ring-1 ${profile?.personaId === p.id ? "ring-2 ring-accent" : "ring-white/10"}`}
+            className={`flex w-full items-start gap-3 rounded-2xl bg-white p-3 text-left ring-1 ${profile?.personaId === p.id ? "ring-2 ring-[#123b8c]" : "ring-black/5"}`}
           >
             <span className="text-3xl">{p.avatar}</span>
             <span className="min-w-0">
               <b className="block text-sm">
-                {p.name} <span className="font-normal text-muted">· {MOBILITY_LABEL[p.mobility].icon} {archetypeById(p.archetypeId)?.figure}</span>
+                {p.name} <span className="font-normal text-gray-500">· {MOBILITY_LABEL[p.mobility].icon} {archetypeById(p.archetypeId)?.figure}</span>
               </b>
-              <span className="block text-xs text-muted">{p.story}</span>
+              <span className="block text-xs text-gray-600">{p.story}</span>
             </span>
           </button>
         ))}

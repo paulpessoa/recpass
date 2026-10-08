@@ -96,10 +96,10 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
       <div className="space-y-3">
         {msgs.map((m, i) => (
           <div key={i} className={m.role === "user" ? "flex justify-end" : ""}>
-            <div className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm ${m.role === "user" ? "bg-accent text-background" : "bg-card shadow-sm ring-1 ring-white/10"}`}>
+            <div className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm ${m.role === "user" ? "bg-[#123b8c] text-white" : "bg-white shadow-sm ring-1 ring-black/5"}`}>
               <p className="whitespace-pre-wrap">{m.content}</p>
               {m.role === "assistant" && (
-                <div className="mt-1 flex items-center gap-2 text-[10px] text-muted">
+                <div className="mt-1 flex items-center gap-2 text-[10px] text-gray-400">
                   <button onClick={() => speak(m.content)} aria-label="Ouvir resposta">
                     🔊 ouvir
                   </button>
@@ -122,13 +122,13 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
             )}
           </div>
         ))}
-        {busy && <div className="w-16 animate-pulse rounded-2xl bg-card px-3 py-2 text-sm shadow-sm">…</div>}
+        {busy && <div className="w-16 animate-pulse rounded-2xl bg-white px-3 py-2 text-sm shadow-sm">…</div>}
         <div ref={endRef} />
       </div>
 
       <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
         {CHIPS.map((c) => (
-          <button key={c} onClick={() => send(c)} className="shrink-0 rounded-full bg-card px-3 py-1.5 text-xs font-medium ring-1 ring-white/10">
+          <button key={c} onClick={() => send(c)} className="shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-medium ring-1 ring-black/10">
             {c}
           </button>
         ))}
@@ -140,20 +140,20 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
         }}
         className="mt-2 flex items-center gap-2"
       >
-        <button type="button" onClick={listen} className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${listening ? "bg-lotado text-white" : "bg-card ring-1 ring-white/10"}`} aria-label="Falar">
+        <button type="button" onClick={listen} className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${listening ? "bg-red-600 text-white" : "bg-white ring-1 ring-black/10"}`} aria-label="Falar">
           🎙️
         </button>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Pergunte ou peça uma rota…"
-          className="h-11 min-w-0 flex-1 rounded-full bg-card px-4 text-sm ring-1 ring-white/10"
+          className="h-11 min-w-0 flex-1 rounded-full bg-white px-4 text-sm ring-1 ring-black/10"
         />
-        <button type="submit" className="h-11 shrink-0 rounded-full bg-accent px-4 text-sm font-bold text-background">
+        <button type="submit" className="h-11 shrink-0 rounded-full bg-[#f26b1d] px-4 text-sm font-bold text-white">
           Enviar
         </button>
       </form>
-      <label className="mt-2 flex items-center gap-1.5 text-xs text-muted">
+      <label className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
         <input type="checkbox" checked={voice} onChange={(e) => setVoice(e.target.checked)} /> Ler respostas em voz alta
       </label>
     </div>
@@ -173,7 +173,7 @@ function ActionLinks({ cards, from }: { cards: AgentCard[]; from: string }) {
   return (
     <div className="flex flex-wrap gap-2 pt-1">
       {links.map((l) => (
-        <Link key={l.href} href={l.href} className="rounded-full bg-route px-3 py-1.5 text-xs font-semibold text-white">
+        <Link key={l.href} href={l.href} className="rounded-full bg-[#123b8c] px-3 py-1.5 text-xs font-semibold text-white">
           {l.label}
         </Link>
       ))}

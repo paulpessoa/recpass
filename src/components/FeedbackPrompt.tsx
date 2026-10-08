@@ -68,7 +68,7 @@ export function FeedbackPrompt() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Dar feedback sobre o app"
-        className="fab fixed bottom-20 left-1/2 z-[1001] -ml-[176px] flex h-14 w-14 flex-col items-center justify-center rounded-full bg-card text-xl text-accent shadow-lg ring-1 ring-white/10 sm:-ml-[206px]"
+        className="fixed bottom-20 left-1/2 z-[1001] -ml-[176px] flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white text-xl text-[#123b8c] shadow-lg ring-1 ring-black/10 sm:-ml-[206px]"
       >
         📝<span className="text-[9px] font-bold leading-none">Feedback</span>
       </button>
@@ -80,7 +80,7 @@ export function FeedbackPrompt() {
             aria-modal="true"
             aria-labelledby="fb-title"
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-card p-5 text-foreground shadow-xl sm:rounded-3xl"
+            className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-white p-5 text-gray-900 shadow-xl sm:rounded-3xl"
           >
             {sent ? (
               <Thanks onClose={() => setOpen(false)} />
@@ -114,8 +114,8 @@ function Thanks({ onClose }: { onClose: () => void }) {
     <div className="py-6 text-center">
       <div className="text-5xl">🙌</div>
       <h2 className="mt-3 text-lg font-bold">Obrigado pelo feedback!</h2>
-      <p className="mt-1 text-sm text-muted">Ele vai direto para o time do RecPass. Pode continuar explorando o app.</p>
-      <button onClick={onClose} className="mt-5 w-full rounded-2xl bg-accent py-3 font-bold text-background">
+      <p className="mt-1 text-sm text-gray-600">Ele vai direto para o time do RecPass. Pode continuar explorando o app.</p>
+      <button onClick={onClose} className="mt-5 w-full rounded-2xl bg-[#123b8c] py-3 font-bold text-white">
         Voltar ao app
       </button>
     </div>
@@ -159,7 +159,7 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
   }
 
   const chip = (on: boolean) =>
-    `rounded-full px-3 py-1.5 text-sm ring-1 ${on ? "bg-accent text-background ring-accent" : "bg-card text-foreground/85 ring-white/20"}`;
+    `rounded-full px-3 py-1.5 text-sm ring-1 ${on ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white text-gray-700 ring-gray-300"}`;
 
   return (
     <form onSubmit={submit} className="space-y-5">
@@ -168,9 +168,9 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
           <h2 id="fb-title" className="text-lg font-bold">
             O que achou do RecPass?
           </h2>
-          <p className="text-sm text-muted">1 minuto. Só a nota é obrigatória.</p>
+          <p className="text-sm text-gray-600">1 minuto. Só a nota é obrigatória.</p>
         </div>
-        <button type="button" onClick={onCancel} aria-label="Fechar" className="rounded-full px-2 text-2xl leading-none text-muted">
+        <button type="button" onClick={onCancel} aria-label="Fechar" className="rounded-full px-2 text-2xl leading-none text-gray-400">
           ×
         </button>
       </div>
@@ -202,7 +202,7 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
               type="button"
               onClick={() => setRecommend(n)}
               aria-pressed={recommend === n}
-              className={`rounded-lg py-2 text-sm font-semibold ring-1 ${recommend === n ? "bg-accent text-background ring-accent" : "ring-white/20"}`}
+              className={`rounded-lg py-2 text-sm font-semibold ring-1 ${recommend === n ? "bg-[#f26b1d] text-white ring-[#f26b1d]" : "ring-gray-300"}`}
             >
               {n}
             </button>
@@ -239,7 +239,7 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
           onChange={(e) => setMissing(e.target.value)}
           rows={3}
           maxLength={2000}
-          className="w-full rounded-xl border border-white/20 p-3 text-sm"
+          className="w-full rounded-xl border border-gray-300 p-3 text-sm"
           placeholder="Ex.: não entendi a bateria, queria ver o banheiro acessível mais perto…"
         />
       </label>
@@ -257,30 +257,30 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
           value={role}
           onChange={(e) => setRole(e.target.value)}
           maxLength={120}
-          className="mt-2 w-full rounded-xl border border-white/20 p-3 text-sm"
+          className="mt-2 w-full rounded-xl border border-gray-300 p-3 text-sm"
           placeholder="Cargo ou empresa (opcional)"
         />
       </fieldset>
 
-      <fieldset className="space-y-2 rounded-2xl bg-white/10 p-3">
+      <fieldset className="space-y-2 rounded-2xl bg-gray-50 p-3">
         <legend className="sr-only">Contato (opcional)</legend>
         <p className="text-sm font-semibold">Quer acompanhar o projeto? (opcional)</p>
-        <input value={name} onChange={(e) => setName(e.target.value)} maxLength={120} className="w-full rounded-xl border border-white/20 p-3 text-sm" placeholder="Nome" />
+        <input value={name} onChange={(e) => setName(e.target.value)} maxLength={120} className="w-full rounded-xl border border-gray-300 p-3 text-sm" placeholder="Nome" />
         <input
           value={contact}
           onChange={(e) => setContact(e.target.value)}
           maxLength={160}
-          className="w-full rounded-xl border border-white/20 p-3 text-sm"
+          className="w-full rounded-xl border border-gray-300 p-3 text-sm"
           placeholder="E-mail ou WhatsApp"
         />
-        <label className="flex items-start gap-2 text-xs text-muted">
+        <label className="flex items-start gap-2 text-xs text-gray-600">
           <input type="checkbox" checked={canContact} onChange={(e) => setCanContact(e.target.checked)} className="mt-0.5" />
           Autorizo o time do RecPass a me contatar sobre o projeto. Os dados ficam só com o time e não são compartilhados.
         </label>
       </fieldset>
 
       {status === "error" && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="text-sm text-red-600">
           Não consegui enviar. Confira a internet e tente de novo.
           {errorMsg && <span className="mt-1 block text-xs text-red-400">Detalhe: {errorMsg}</span>}
         </p>
@@ -289,7 +289,7 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
       <button
         type="submit"
         disabled={!rating || status === "sending"}
-        className="w-full rounded-2xl bg-accent py-3 font-bold text-background disabled:opacity-40"
+        className="w-full rounded-2xl bg-[#123b8c] py-3 font-bold text-white disabled:opacity-40"
       >
         {status === "sending" ? "Enviando…" : rating ? "Enviar feedback" : "Escolha uma nota para enviar"}
       </button>

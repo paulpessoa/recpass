@@ -20,9 +20,9 @@ const fmt = (ms: number) => {
 };
 
 const PHASE_UI: Record<Phase, { label: string; color: string }> = {
-  listening: { label: "Ouvindo…", color: "#00C853" },
-  thinking: { label: "Pensando…", color: "#FFCC00" },
-  speaking: { label: "Falando…", color: "#0055FF" },
+  listening: { label: "Ouvindo…", color: "#22c55e" },
+  thinking: { label: "Pensando…", color: "#f26b1d" },
+  speaking: { label: "Falando…", color: "#60a5fa" },
 };
 
 /** Botão flutuante + "chamada" por voz com o agente, limitada por cota (custo previsível). */
@@ -128,14 +128,14 @@ export function VoiceCall() {
     <>
       <button
         onClick={start}
-        className="fab fixed bottom-20 left-1/2 z-[1001] ml-[120px] flex h-14 w-14 items-center justify-center rounded-full bg-accent text-2xl text-background shadow-lg shadow-black/40 sm:ml-[150px]"
+        className="fixed bottom-20 left-1/2 z-[1001] ml-[120px] flex h-14 w-14 items-center justify-center rounded-full bg-[#f26b1d] text-2xl text-white shadow-lg shadow-orange-900/30 sm:ml-[150px]"
         aria-label="Falar com o agente por voz"
       >
         🎙️
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[2000] flex flex-col items-center justify-between bg-gradient-to-b from-[#1e1e1e] to-[#121212] px-6 py-10 text-white">
+        <div className="fixed inset-0 z-[2000] flex flex-col items-center justify-between bg-gradient-to-b from-[#0b1f4d] to-[#123b8c] px-6 py-10 text-white">
           <div className="text-center">
             <p className="text-xs uppercase tracking-widest text-white/60">RecPass · chamada</p>
             <p className="mt-1 font-mono text-sm text-white/80">{remainingMs <= 0 && !active.current ? "sem minutos" : `${fmt(left)} restantes`}</p>
@@ -166,7 +166,7 @@ export function VoiceCall() {
           <div className="flex flex-col items-center gap-2">
             <button
               onClick={() => (active.current ? end() : setOpen(false))}
-              className="grid h-16 w-16 place-items-center rounded-full bg-lotado text-2xl shadow-lg"
+              className="grid h-16 w-16 place-items-center rounded-full bg-red-600 text-2xl shadow-lg"
               aria-label="Encerrar chamada"
             >
               ✕

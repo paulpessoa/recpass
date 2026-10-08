@@ -349,7 +349,6 @@ export type Activity = {
   track: Track;
   topics: string[];
   format: "Palestra" | "Workshop" | "Painel" | "Show" | "Experiência";
-  speakers?: string[]; // vazio até a programação oficial sair (não inventar nomes)
   libras?: boolean;
   audiodescricao?: boolean;
   legenda?: boolean;
