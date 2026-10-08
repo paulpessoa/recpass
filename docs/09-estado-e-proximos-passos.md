@@ -61,7 +61,7 @@
 
 ## Bugs em aberto
 
-- **"This page couldn't load" no `/agente` ao receber a resposta.** Acontece no Chrome real do Paul, inclusive na emulação de iPhone, mas não num navegador limpo nem localmente. O erro acontece também ao voltar para a home e cai na tela **global**, ou seja, no layout raiz. Ação tomada: o VLibras, principal suspeito, foi removido, e foram criados o `src/app/error.tsx` e o `src/app/global-error.tsx`, que mostram a mensagem real. Se voltar a quebrar, ler a mensagem na tela. Testar também numa janela anônima, sem extensões.
+- **"This page couldn't load" (resolvido em 8/out).** O console mostrava `Uncaught TypeError: i is not a function` num arquivo minificado, ao navegar depois de vários deploys com a aba aberta. Causa: a aba antiga misturava código de duas versões. Correção: `deploymentId` no `next.config.ts` (usa o `VERCEL_DEPLOYMENT_ID`), que faz a aba recarregar a página inteira quando a versão muda. Por precaução, o VLibras também foi removido, e foram criados o `error.tsx` e o `global-error.tsx`, que mostram a mensagem real se algo quebrar.
 - **Gemini 429 (cota excedida):** a chave atingiu o limite do plano gratuito. O app cai no modo regras. Para ter IA de novo: ativar cobrança no projeto do Google AI Studio ou esperar a cota renovar.
 
 ## Próximos passos de produto
