@@ -5,16 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { ActivityCard } from "@/components/ActivityCard";
 import { AgentChat } from "@/components/AgentChat";
-import { ACTIVITIES, MOBILITY_LABEL, PERSONAS, VENUES, tagById, venueById, type Mobility } from "@/lib/data";
+import { ACTIVITIES, VENUES, tagById, venueById } from "@/lib/data";
 import { act, speak, stopSpeaking, useGuide, useLocation, useProfile, useShared } from "@/lib/client";
 import { HERITAGE } from "@/lib/heritage";
-import { actEnd, actStart, activityAt, activityFill, computeRoute, festivalNow, fillStatus, profileFromPersona, recommend, venueHeat } from "@/lib/engine";
+import { actEnd, actStart, activityAt, activityFill, computeRoute, festivalNow, fillStatus, profileMobility, recommend, venueHeat } from "@/lib/engine";
 
 export function TagLanding({ id }: { id: string }) {
   const tag = tagById(id)!;
   const venue = venueById(tag.venueId)!;
   const { state, at } = useShared();
-  const [profile, setProfile] = useProfile();
+  const [profile] = useProfile();
   const [, setLoc] = useLocation();
   const registered = useRef(false);
   const [guide, setGuide] = useGuide();
@@ -42,7 +42,7 @@ export function TagLanding({ id }: { id: string }) {
   const status = current ? fillStatus(fill, current, now) : null;
   const full = status?.key === "lotado" || status?.key === "ultimas";
   const recs = recommend({ state, profile, fromVenueId: venue.id, limit: 3, excludeIds: current ? [current.id] : [], at });
-  const mobility = profile?.mobility ?? "padrao";
+  const mobility = profileMobility(profile);
   const heat = (vid: string) => venueHeat(vid, state, at);
 
   const greeting = !profile
@@ -168,32 +168,13 @@ export function TagLanding({ id }: { id: string }) {
       )}
 
       {!profile && (
-        <section className="mb-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5">
-          <h2 className="font-bold">Ainda não te conheço 🙂</h2>
-          <p className="mt-1 text-sm text-gray-600">Um toque pra eu adaptar a rota:</p>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {(Object.keys(MOBILITY_LABEL) as Mobility[]).map((m) => (
-              <button
-                key={m}
-                onClick={() => setProfile({ name: "Visitante", avatar: MOBILITY_LABEL[m].icon, mobility: m, interests: [], needs: [] })}
-                className="rounded-xl bg-gray-50 p-2 text-center text-[11px] ring-1 ring-black/5"
-              >
-                <span className="block text-xl">{MOBILITY_LABEL[m].icon}</span>
-                {MOBILITY_LABEL[m].label}
-              </button>
-            ))}
-          </div>
-          <div className="mt-3 flex gap-2 overflow-x-auto">
-            {PERSONAS.map((p) => (
-              <button key={p.id} onClick={() => setProfile(profileFromPersona(p))} className="shrink-0 rounded-full bg-gray-100 px-3 py-1 text-xs">
-                {p.avatar} {p.name.split(",")[0]}
-              </button>
-            ))}
-          </div>
-          <Link href="/perfil?quiz=1" className="mt-3 block text-center text-sm font-semibold text-[#123b8c]">
-            Fazer diagnóstico completo →
-          </Link>
-        </section>
+        <a href="#agente" className="mb-4 flex items-center gap-3 rounded-2xl bg-[#f26b1d] p-3 text-sm text-white">
+          <span className="text-2xl">💬</span>
+          <span>
+            <b className="block">Ainda não te conheço 🙂</b>
+            Responda 4 toques com o agente e a rota se adapta a você.
+          </span>
+        </a>
       )}
 
       {recs.length > 0 && (
@@ -207,7 +188,7 @@ export function TagLanding({ id }: { id: string }) {
         </section>
       )}
 
-      <section>
+      <section id="agente" className="scroll-mt-28">
         <h2 className="mb-2 text-lg font-bold">Fale com o agente</h2>
         <AgentChat key={`${profile?.name ?? "anon"}-${tag.id}`} greeting={greeting} />
       </section>

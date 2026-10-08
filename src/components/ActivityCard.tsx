@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { venueById, type Activity } from "@/lib/data";
-import { activityFill, festivalNow, fillStatus, isAccessibleFor, type Profile, type SharedState } from "@/lib/engine";
+import { activityFill, festivalNow, fillStatus, isAccessibleFor, profileMobility, type Profile, type SharedState } from "@/lib/engine";
 import { Battery } from "./Battery";
 
 export function A11yBadges({ a }: { a: Activity }) {
@@ -54,7 +54,7 @@ export function ActivityCard({
   const now = festivalNow(state, at);
   const fill = activityFill(a, state, at);
   const status = fillStatus(fill, a, now);
-  const blocked = profile ? !isAccessibleFor(a, profile.mobility) : false;
+  const blocked = profile ? !isAccessibleFor(a, profileMobility(profile)) : false;
   return (
     <article className={`rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${blocked ? "opacity-60" : ""}`}>
       <div className="flex items-start justify-between gap-3">

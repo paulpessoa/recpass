@@ -1,5 +1,5 @@
-import { MOBILITY_LABEL, venueById, type Mobility } from "@/lib/data";
-import { SURFACE_LABEL, type Route } from "@/lib/engine";
+import { mobilityText, venueById } from "@/lib/data";
+import { SURFACE_LABEL, mobilityList, type MobilityInput, type Route } from "@/lib/engine";
 
 const SURFACE_DOT: Record<string, string> = {
   asfalto: "#2563EB",
@@ -8,7 +8,7 @@ const SURFACE_DOT: Record<string, string> = {
   escadaria: "#DC2626",
 };
 
-export function RouteSummary({ route, mobility }: { route: Route; mobility: Mobility }) {
+export function RouteSummary({ route, mobility }: { route: Route; mobility: MobilityInput }) {
   if (!route.ok) {
     return <div className="rounded-2xl bg-red-50 p-4 text-sm text-red-800">{route.warnings[0]}</div>;
   }
@@ -24,7 +24,7 @@ export function RouteSummary({ route, mobility }: { route: Route; mobility: Mobi
         </span>
       </div>
       <p className="mt-1 text-xs text-gray-500">
-        Rota para {MOBILITY_LABEL[mobility].icon} {MOBILITY_LABEL[mobility].label.toLowerCase()}
+        Rota para {mobilityText(mobilityList(mobility)).toLowerCase()}
       </p>
       <ol className="mt-3 space-y-1.5">
         {route.segments.map((s, i) => (

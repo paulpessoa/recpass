@@ -6,7 +6,7 @@ import { Map } from "@/components/Map";
 import { RouteSummary } from "@/components/RouteSummary";
 import { MOBILITY_LABEL, VENUES, venueById, type Mobility } from "@/lib/data";
 import { useLocation, useProfile, useShared } from "@/lib/client";
-import { activityAt, activityFill, computeRoute, festivalNow, fillStatus, venueHeat } from "@/lib/engine";
+import { activityAt, activityFill, computeRoute, festivalNow, fillStatus, mobilityList, profileMobility, venueHeat } from "@/lib/engine";
 import { Battery } from "@/components/Battery";
 
 export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | null; initialTo: string | null }) {
@@ -15,8 +15,10 @@ export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | n
   const [loc] = useLocation();
   const [from, setFrom] = useState(initialFrom ?? loc?.venueId ?? "marco-zero");
   const [to, setTo] = useState<string | null>(initialTo);
-  const [mobilityPick, setMobility] = useState<Mobility | null>(null);
-  const mobility: Mobility = mobilityPick ?? profile?.mobility ?? "padrao";
+  const [mobilityPick, setMobility] = useState<Mobility[] | null>(null);
+  const mobility: Mobility[] = mobilityPick ?? profileMobility(profile);
+  const toggleMobility = (m: Mobility) =>
+    setMobility(m === "padrao" ? ["padrao"] : mobilityList(mobility.includes(m) ? mobility.filter((x) => x !== m) : [...mobility.filter((x) => x !== "padrao"), m]));
 
   const heat = Object.fromEntries(VENUES.map((v) => [v.id, venueHeat(v.id, state, at)]));
   const route = to && to !== from ? computeRoute(from, to, mobility, (id) => heat[id] ?? 0) : null;
@@ -53,8 +55,8 @@ export function MapaClient({ initialFrom, initialTo }: { initialFrom: string | n
         {(Object.keys(MOBILITY_LABEL) as Mobility[]).map((m) => (
           <button
             key={m}
-            onClick={() => setMobility(m)}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${mobility === m ? "bg-[#123b8c] text-white" : "bg-white text-gray-700 ring-1 ring-black/10"}`}
+            onClick={() => toggleMobility(m)}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${mobility.includes(m) ? "bg-[#123b8c] text-white" : "bg-white text-gray-700 ring-1 ring-black/10"}`}
           >
             {MOBILITY_LABEL[m].icon} {MOBILITY_LABEL[m].label}
           </button>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Map } from "@/components/Map";
 import { ACTIVITIES, VENUES, tagById, venueById } from "@/lib/data";
-import { act, useShared } from "@/lib/client";
+import { act, useMounted, useShared } from "@/lib/client";
 import { actEnd, actStart, activityAt, activityFill, festivalNow, fmtMin, heatColor, venueHeat, venueHeatRaw } from "@/lib/engine";
 
 const PRESETS = ["10:00", "11:00", "13:20", "14:25", "15:00", "17:30", "21:00"];
@@ -12,6 +12,7 @@ const PRESETS = ["10:00", "11:00", "13:20", "14:25", "15:00", "17:30", "21:00"];
 export default function OrgPage() {
   const { state, at, online } = useShared();
   const [clock, setClock] = useState("14:25");
+  const mounted = useMounted();
   const now = festivalNow(state, at);
   const polos = VENUES.filter((v) => v.kind !== "hub");
   const heat = Object.fromEntries(VENUES.map((v) => [v.id, venueHeat(v.id, state, at)]));
@@ -46,6 +47,8 @@ export default function OrgPage() {
       return cold ? { hot: h, hotAct, ...cold } : null;
     })
     .filter(Boolean) as { hot: (typeof VENUES)[number]; hotAct: ReturnType<typeof activityAt>; c: (typeof VENUES)[number]; act: (typeof ACTIVITIES)[number]; overlap: number }[];
+
+  if (!mounted) return <div className="min-h-dvh bg-[#0f1729]" />;
 
   return (
     <div className="min-h-dvh bg-[#0f1729] text-white">

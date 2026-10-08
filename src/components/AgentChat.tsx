@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { activityById, type Mobility } from "@/lib/data";
+import { activityById, archetypeById, venueById } from "@/lib/data";
 import { askAgent, speak, useLocation, useProfile, useShared, type ChatMsg } from "@/lib/client";
-import { computeRoute, venueHeat } from "@/lib/engine";
+import { computeRoute, profileMobility, recommend, venueHeat, type Profile } from "@/lib/engine";
+import type { AgentCard } from "@/lib/agent-tools";
+import { AgentOnboarding } from "./AgentOnboarding";
 import { ActivityCard } from "./ActivityCard";
 import { RouteSummary } from "./RouteSummary";
 
@@ -15,14 +18,14 @@ type SpeechRec = { lang: string; interimResults: boolean; onresult: (e: { result
 
 export function AgentChat({ greeting, initialQuestion }: { greeting?: string; initialQuestion?: string | null }) {
   const { state, at } = useShared();
-  const [profile] = useProfile();
+  const [profile, setProfile] = useProfile();
   const [loc] = useLocation();
   const [msgs, setMsgs] = useState<Msg[]>(() => (greeting ? [{ role: "assistant", content: greeting }] : []));
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [listening, setListening] = useState(false);
   const [voicePick, setVoice] = useState<boolean | null>(null);
-  const voice = voicePick ?? profile?.mobility === "visual";
+  const voice = voicePick ?? profileMobility(profile).includes("visual");
   const endRef = useRef<HTMLDivElement>(null);
   const asked = useRef(false);
 
@@ -41,12 +44,32 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
   }
 
   useEffect(() => {
-    if (initialQuestion && !asked.current) {
+    if (initialQuestion && profile && !asked.current) {
       asked.current = true;
       send(initialQuestion);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialQuestion]);
+  }, [initialQuestion, profile]);
+
+  function onboarded(p: Profile, viaDemo: boolean) {
+    setProfile(p);
+    const from = loc?.venueId ?? "marco-zero";
+    const recs = recommend({ state, profile: p, fromVenueId: from, limit: 3, at });
+    const arch = archetypeById(p.archetypeId);
+    const hello = viaDemo
+      ? `Entrando como ${p.name}. `
+      : arch
+        ? `Prontinho! Seu arquétipo é ${arch.emoji} ${arch.figure} — ${arch.name}: ${arch.tagline.toLowerCase()}. `
+        : "Prontinho! ";
+    setMsgs([
+      {
+        role: "assistant",
+        content: `${hello}A partir de ${venueById(from)?.short}, separei ${recs.length} coisas que combinam com você e dão tempo de chegar. Pode me perguntar qualquer coisa.`,
+        cards: recs.map((r) => ({ type: "activity", id: r.activity.id, balanced: r.balanced })),
+        mode: "regras",
+      },
+    ]);
+  }
 
   function listen() {
     const W = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
@@ -61,7 +84,9 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
     rec.start();
   }
 
-  const mobility: Mobility = profile?.mobility ?? "padrao";
+  const mobility = profileMobility(profile);
+
+  if (!profile) return <AgentOnboarding intro={greeting} onDone={onboarded} />;
 
   return (
     <div className="flex flex-col">
@@ -89,6 +114,7 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
                   const r = computeRoute(c.from, c.to, mobility, (id) => venueHeat(id, state, at));
                   return <RouteSummary key={j} route={r} mobility={mobility} />;
                 })}
+                <ActionLinks cards={m.cards} from={loc?.venueId ?? "marco-zero"} />
               </div>
             )}
           </div>
@@ -127,6 +153,27 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
       <label className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
         <input type="checkbox" checked={voice} onChange={(e) => setVoice(e.target.checked)} /> Ler respostas em voz alta
       </label>
+    </div>
+  );
+}
+
+/** Atalhos ao fim de cada resposta: abrem a sugestão dentro do app (lista filtrada ou mapa). */
+function ActionLinks({ cards, from }: { cards: AgentCard[]; from: string }) {
+  const acts = cards.filter((c): c is Extract<AgentCard, { type: "activity" }> => c.type === "activity");
+  const routes = cards.filter((c): c is Extract<AgentCard, { type: "route" }> => c.type === "route");
+  const firstVenue = acts.length ? activityById(acts[0].id)?.venueId : null;
+  const links: { href: string; label: string }[] = [];
+  for (const r of routes) links.push({ href: `/mapa?from=${r.from}&to=${r.to}`, label: `🗺️ Abrir rota até ${venueById(r.to)?.short ?? "o destino"} no mapa` });
+  if (acts.length) links.push({ href: `/?ids=${acts.map((a) => a.id).join(",")}`, label: `📋 Ver ${acts.length > 1 ? "estas sugestões" : "esta sugestão"} na lista` });
+  if (firstVenue && !routes.length) links.push({ href: `/mapa?from=${from}&to=${firstVenue}`, label: `🗺️ Ver ${venueById(firstVenue)?.short} no mapa` });
+  if (!links.length) return null;
+  return (
+    <div className="flex flex-wrap gap-2 pt-1">
+      {links.map((l) => (
+        <Link key={l.href} href={l.href} className="rounded-full bg-[#123b8c] px-3 py-1.5 text-xs font-semibold text-white">
+          {l.label}
+        </Link>
+      ))}
     </div>
   );
 }

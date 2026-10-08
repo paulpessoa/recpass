@@ -1,7 +1,7 @@
 // Agente de reserva por regras: funciona sem chave de IA e sem internet (roda no navegador).
 // Também é o "modo econômico": a maioria das perguntas do festival cabe aqui, a custo zero.
-import { MOBILITY_LABEL, VENUES, venueById } from "./data";
-import { activityAt, activityFill, computeRoute, fillStatus, festivalNow, recommend, venueHeat, SURFACE_LABEL } from "./engine";
+import { VENUES, mobilityText, venueById } from "./data";
+import { activityAt, activityFill, computeRoute, fillStatus, festivalNow, profileMobility, recommend, venueHeat, SURFACE_LABEL } from "./engine";
 import type { AgentCard, AgentContext } from "./agent-tools";
 
 const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -17,7 +17,7 @@ export function fallbackReply(text: string, ctx: AgentContext): { text: string; 
   const t = norm(text);
   const cards: AgentCard[] = [];
   const here = ctx.venueId ?? "marco-zero";
-  const mobility = ctx.profile?.mobility ?? "padrao";
+  const mobility = profileMobility(ctx.profile);
   const heat = (id: string) => venueHeat(id, ctx.state, at);
 
   // Ir embora / embarque
@@ -57,7 +57,7 @@ export function fallbackReply(text: string, ctx: AgentContext): { text: string; 
   const dest = findVenue(text);
   if (dest && /(como|chegar|ir|rota|caminho|onde fica|levar)/.test(t)) {
     const r = computeRoute(here, dest.id, mobility, heat);
-    if (!r.ok) return { confident: true, text: `Não encontrei rota acessível até ${dest.short} para ${MOBILITY_LABEL[mobility].label.toLowerCase()}. ${dest.universalAccess}`, cards };
+    if (!r.ok) return { confident: true, text: `Não encontrei rota acessível até ${dest.short} para ${mobilityText(mobility, false).toLowerCase()}. ${dest.universalAccess}`, cards };
     cards.push({ type: "route", from: here, to: dest.id });
     const desvio = r.avoided.length ? ` Desviei de ${r.avoided.slice(0, 2).join(" e ")}.` : "";
     const piso = r.segments.map((s) => SURFACE_LABEL[s.surface]);

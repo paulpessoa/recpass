@@ -1,5 +1,5 @@
 // Ferramentas do agente: a IA só conversa; quem decide rota, vaga e recomendação é o motor determinístico.
-import { ACTIVITIES, ARCHETYPES, MOBILITY_LABEL, VENUES, activityById, venueById } from "./data";
+import { ACTIVITIES, ARCHETYPES, VENUES, activityById, mobilityText, venueById } from "./data";
 import {
   SURFACE_LABEL,
   actStart,
@@ -9,6 +9,7 @@ import {
   festivalNow,
   fillStatus,
   fmtMin,
+  profileMobility,
   recommend,
   venueHeat,
   type Profile,
@@ -76,7 +77,7 @@ export function runTool(name: string, input: Record<string, unknown>, ctx: Agent
   const at = ctx.at ?? Date.now();
   const now = festivalNow(ctx.state, at);
   const heat = (id: string) => venueHeat(id, ctx.state, at);
-  const mobility = ctx.profile?.mobility ?? "padrao";
+  const mobility = profileMobility(ctx.profile);
 
   switch (name) {
     case "recomendar_atividades": {
@@ -144,7 +145,7 @@ export function runTool(name: string, input: Record<string, unknown>, ctx: Agent
         return JSON.stringify({ mesmo_local: true, local: v.short, circulacao: v.vertical ?? [], acesso: v.universalAccess, sala: act ? `${act.room}, ${act.floor <= 1 ? "térreo" : act.floor + "º andar"}` : null });
       }
       const r = computeRoute(from, to, mobility, heat);
-      if (!r.ok) return `Sem rota acessível de ${venueById(from)?.short} até ${venueById(to)?.short} para o perfil ${MOBILITY_LABEL[mobility].label}.`;
+      if (!r.ok) return `Sem rota acessível de ${venueById(from)?.short} até ${venueById(to)?.short} para o perfil ${mobilityText(mobility, false)}.`;
       cards.push({ type: "route", from, to });
       return JSON.stringify({
         de: venueById(from)?.short,
@@ -200,7 +201,7 @@ Contexto agora:
 - Local atual (última tag NFC): ${here ? `${here.name} (id ${here.id})` : "desconhecido — pergunte ou use Marco Zero como referência"}
 - Perfil: ${
     p
-      ? `${p.name}; mobilidade: ${MOBILITY_LABEL[p.mobility].label}; arquétipo: ${arch ? `${arch.figure} (${arch.name})` : "não definido"}; interesses: ${p.interests.join(", ") || "—"}; necessidades: ${p.needs.join(", ") || "—"}`
+      ? `${p.name}; mobilidade: ${mobilityText(profileMobility(p), false)}; arquétipo: ${arch ? `${arch.figure} (${arch.name})` : "não definido"}; interesses: ${p.interests.join(", ") || "—"}; necessidades: ${p.needs.join(", ") || "—"}`
       : "ainda não definido"
   }
 - Locais (id: nome): ${VENUES.map((v) => `${v.id}: ${v.short}`).join("; ")}

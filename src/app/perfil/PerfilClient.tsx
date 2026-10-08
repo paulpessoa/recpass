@@ -3,39 +3,18 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { ARCHETYPES, MOBILITY_LABEL, PERSONAS, archetypeById, type Mobility } from "@/lib/data";
+import { ARCHETYPES, MOBILITY_LABEL, PERSONAS, archetypeById, mobilityText, type Mobility } from "@/lib/data";
 import { useGuide, useProfile } from "@/lib/client";
-import { profileFromPersona } from "@/lib/engine";
-
-const VIBES: { label: string; scores: Record<string, number> }[] = [
-  { label: "Descobrir algo que ainda nem tem nome", scores: { chico: 2, nana: 1 } },
-  { label: "Entender as raízes e a cultura por trás da tecnologia", scores: { ariano: 2, clarice: 1 } },
-  { label: "Fazer negócios e conexões", scores: { nassau: 2, chico: 1 } },
-  { label: "Aprender algo prático para a carreira", scores: { freire: 2, nassau: 1 } },
-  { label: "Ambientes calmos e conversas profundas", scores: { clarice: 2, freire: 1 } },
-  { label: "Sentir: som, arte, experiências imersivas", scores: { nana: 2, chico: 1 } },
-];
-
-const PLACES: { label: string; id: string }[] = [
-  { label: "🦀 O mangue, onde tudo se mistura", id: "chico" },
-  { label: "⛪ O Pátio de São Pedro e suas histórias", id: "ariano" },
-  { label: "🌉 As pontes sobre o Capibaribe", id: "nassau" },
-  { label: "🏫 Uma escola comunitária no bairro", id: "freire" },
-  { label: "🎺 O Paço do Frevo em dia de ensaio", id: "nana" },
-  { label: "📖 Uma livraria silenciosa na Boa Vista", id: "clarice" },
-];
-
-const TOPICS = ["ia", "dev", "carreira", "startups", "investimento", "negocios", "cidades", "mobilidade", "dados", "cultura", "patrimonio", "musica", "arte", "games", "xr", "design", "ux", "educacao", "acessibilidade", "diversidade", "hardware"];
-
-const NEEDS = ["libras", "audiodescrição", "evitar aglomeração", "fraldário", "sombra", "assento"];
+import { profileFromPersona, profileMobility } from "@/lib/engine";
+import { NEEDS, PLACES, TOPICS, VIBES, profileFromQuiz, toggleMobility } from "@/lib/quiz";
 
 export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
   const [profile, setProfile] = useProfile();
   const [guide, setGuide] = useGuide();
   const [quiz, setQuiz] = useState(startQuiz);
   const [step, setStep] = useState(0);
-  const [mobility, setMobility] = useState<Mobility>("padrao");
-  const [vibe, setVibe] = useState<number | null>(null);
+  const [mobilities, setMobilities] = useState<Mobility[]>(["padrao"]);
+  const [vibes, setVibes] = useState<number[]>([]);
   const [place, setPlace] = useState<string | null>(null);
   const [topics, setTopics] = useState<string[]>([]);
   const [needs, setNeeds] = useState<string[]>([]);
@@ -44,19 +23,7 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
   const toggle = (list: string[], set: (v: string[]) => void, v: string) => set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 
   function finish() {
-    const score: Record<string, number> = {};
-    if (vibe !== null) for (const [k, v] of Object.entries(VIBES[vibe].scores)) score[k] = (score[k] ?? 0) + v;
-    if (place) score[place] = (score[place] ?? 0) + 2;
-    for (const a of ARCHETYPES) score[a.id] = (score[a.id] ?? 0) + topics.filter((t) => a.topics.includes(t)).length * 0.5;
-    const archetypeId = Object.entries(score).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "freire";
-    setProfile({
-      name: name.trim() || "Você",
-      avatar: archetypeById(archetypeId)?.emoji ?? "🙂",
-      mobility,
-      archetypeId,
-      interests: topics,
-      needs,
-    });
+    setProfile(profileFromQuiz({ mobilities, vibes, place, topics, needs, name }));
     setQuiz(false);
     setStep(0);
   }
@@ -67,22 +34,23 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
     const steps = [
       <div key="mob">
         <h2 className="text-lg font-bold">Como você vai circular hoje?</h2>
-        <p className="mb-3 text-sm text-gray-600">Isso muda a rota, não o que você pode ver.</p>
+        <p className="mb-3 text-sm text-gray-600">Marque tudo o que se aplica. Isso muda a rota, não o que você pode ver.</p>
         <div className="grid gap-2">
           {(Object.keys(MOBILITY_LABEL) as Mobility[]).map((m) => (
-            <button key={m} onClick={() => setMobility(m)} className={`rounded-xl p-3 text-left ring-1 ${mobility === m ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
+            <button key={m} onClick={() => setMobilities(toggleMobility(mobilities, m))} className={`rounded-xl p-3 text-left ring-1 ${mobilities.includes(m) ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
               <span className="mr-2">{MOBILITY_LABEL[m].icon}</span>
               <b>{MOBILITY_LABEL[m].label}</b>
-              <span className={`block text-xs ${mobility === m ? "text-white/80" : "text-gray-500"}`}>{MOBILITY_LABEL[m].hint}</span>
+              <span className={`block text-xs ${mobilities.includes(m) ? "text-white/80" : "text-gray-500"}`}>{MOBILITY_LABEL[m].hint}</span>
             </button>
           ))}
         </div>
       </div>,
       <div key="vibe">
-        <h2 className="mb-3 text-lg font-bold">Num festival, você é de…</h2>
+        <h2 className="text-lg font-bold">Num festival, você é de…</h2>
+        <p className="mb-3 text-sm text-gray-600">Pode marcar mais de uma.</p>
         <div className="grid gap-2">
           {VIBES.map((v, i) => (
-            <button key={v.label} onClick={() => setVibe(i)} className={`rounded-xl p-3 text-left text-sm ring-1 ${vibe === i ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
+            <button key={v.label} onClick={() => setVibes(vibes.includes(i) ? vibes.filter((x) => x !== i) : [...vibes, i])} className={`rounded-xl p-3 text-left text-sm ring-1 ${vibes.includes(i) ? "bg-[#123b8c] text-white ring-[#123b8c]" : "bg-white ring-black/10"}`}>
               {v.label}
             </button>
           ))}
@@ -163,7 +131,7 @@ export function PerfilClient({ startQuiz }: { startQuiz: boolean }) {
           <div className="p-4 text-sm">
             <p className="text-gray-700">{arch.description}</p>
             <p className="mt-3 text-xs text-gray-500">
-              {profile.avatar} {profile.name} · {MOBILITY_LABEL[profile.mobility].icon} {MOBILITY_LABEL[profile.mobility].label}
+              {profile.avatar} {profile.name} · {mobilityText(profileMobility(profile))}
             </p>
             {profile.interests.length > 0 && <p className="mt-1 text-xs text-gray-500">Interesses: {profile.interests.join(", ")}</p>}
             {profile.needs.length > 0 && <p className="mt-1 text-xs text-gray-500">Necessidades: {profile.needs.join(", ")}</p>}

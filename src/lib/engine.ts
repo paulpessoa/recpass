@@ -55,7 +55,8 @@ export type Profile = {
   personaId?: string;
   name: string;
   avatar: string;
-  mobility: Mobility;
+  mobility: Mobility; // a mais restritiva (compatibilidade)
+  mobilities?: Mobility[]; // múltipla escolha
   archetypeId?: string;
   interests: string[];
   needs: string[];
@@ -70,6 +71,25 @@ export const profileFromPersona = (p: Persona): Profile => ({
   interests: p.interests,
   needs: p.needs,
 });
+
+// ---------- Mobilidade combinada (múltipla escolha) ----------
+
+export type MobilityInput = Mobility | Mobility[];
+
+const RESTRICTION: Mobility[] = ["cadeirante", "reduzida", "colo", "visual", "sensorial", "padrao"];
+
+export function mobilityList(m: MobilityInput): Mobility[] {
+  const l = (Array.isArray(m) ? m : [m]).filter((x) => x !== "padrao");
+  return l.length ? [...new Set(l)] : ["padrao"];
+}
+
+/** A mais restritiva da lista — usada onde só cabe um valor (ícone, compatibilidade). */
+export const primaryMobility = (m: MobilityInput): Mobility => {
+  const l = mobilityList(m);
+  return RESTRICTION.find((r) => l.includes(r)) ?? "padrao";
+};
+
+export const profileMobility = (p?: Profile | null): Mobility[] => (p ? mobilityList(p.mobilities?.length ? p.mobilities : p.mobility) : ["padrao"]);
 
 // ---------- Lotação simulada ----------
 
@@ -217,7 +237,12 @@ function edgeCrowd(e: { a: string; b: string }, heat: (id: string) => number) {
   return (h(e.a) + h(e.b)) / 200; // 0..1
 }
 
-export function computeRoute(from: string, to: string, mobility: Mobility, heat: (id: string) => number): Route {
+export function computeRoute(from: string, to: string, mobilityIn: MobilityInput, heat: (id: string) => number): Route {
+  const mobs = mobilityList(mobilityIn);
+  const mobility = primaryMobility(mobs);
+  const speed = Math.min(...mobs.map((m) => SPEED[m]));
+  const surf = (s: Surface) => Math.max(...mobs.map((m) => SURFACE_FACTOR[m][s]));
+  const crowdW = Math.max(...mobs.map((m) => CROWD_WEIGHT[m]));
   const adj = new Map<string, { to: string; edge: (typeof EDGES)[number] }[]>();
   for (const e of EDGES) {
     adj.set(e.a, [...(adj.get(e.a) ?? []), { to: e.b, edge: e }]);
@@ -243,10 +268,10 @@ export function computeRoute(from: string, to: string, mobility: Mobility, heat:
     for (const { to: nxt, edge } of adj.get(cur) ?? []) {
       if (done.has(nxt)) continue;
       const meters = distM(nodeById(cur), nodeById(nxt));
-      const sf = SURFACE_FACTOR[mobility][edge.surface] * (edge.narrow ? 1.15 : 1);
+      const sf = surf(edge.surface) * (edge.narrow ? 1.15 : 1);
       if (!isFinite(sf)) continue;
       const crowd = edgeCrowd(edge, heat);
-      const c = best + (meters / SPEED[mobility]) * sf * (1 + CROWD_WEIGHT[mobility] * crowd * crowd);
+      const c = best + (meters / speed) * sf * (1 + crowdW * crowd * crowd);
       if (c < (cost.get(nxt) ?? Infinity)) {
         cost.set(nxt, c);
         prev.set(nxt, { node: cur, edge });
@@ -269,13 +294,13 @@ export function computeRoute(from: string, to: string, mobility: Mobility, heat:
     n = p.node;
   }
   const meters = segments.reduce((s, x) => s + x.meters, 0);
-  const crowdDelay = segments.reduce((s, x) => s + x.meters * CROWD_WEIGHT[mobility] * x.crowd * 0.3, 0);
-  const minutes = Math.max(1, Math.round((meters + crowdDelay) / SPEED[mobility] / 60 + (segments.length ? 0.5 : 0)));
+  const crowdDelay = segments.reduce((s, x) => s + x.meters * crowdW * x.crowd * 0.3, 0);
+  const minutes = Math.max(1, Math.round((meters + crowdDelay) / speed / 60 + (segments.length ? 0.5 : 0)));
 
   const warnings: string[] = [];
   const dest = venueById(to);
   if (dest && mobility !== "padrao" && dest.mainEntrance === "escada") warnings.push(dest.universalAccess);
-  if (dest && !dest.accessible && (mobility === "cadeirante" || mobility === "reduzida")) warnings.push(`${dest.short} não tem acesso universal. ${dest.universalAccess}`);
+  if (dest && !dest.accessible && (mobs.includes("cadeirante") || mobs.includes("reduzida"))) warnings.push(`${dest.short} não tem acesso universal. ${dest.universalAccess}`);
   const cobble = segments.filter((s) => s.surface === "paralelepipedo").reduce((s, x) => s + x.meters, 0);
   if (cobble > 0 && mobility !== "padrao") warnings.push(`${Math.round(cobble)} m em paralelepípedo inevitáveis neste trajeto.`);
 
@@ -317,13 +342,14 @@ export function relevanceOf(a: Activity, profile?: Profile | null) {
   return clamp(w / 1.8, 0, 1);
 }
 
-export function isAccessibleFor(a: Activity, mobility: Mobility) {
+export function isAccessibleFor(a: Activity, mobilityIn: MobilityInput) {
   const v = venueById(a.venueId)!;
-  if (mobility === "cadeirante" || mobility === "reduzida") {
+  const mobs = mobilityList(mobilityIn);
+  if (mobs.includes("cadeirante") || mobs.includes("reduzida")) {
     if (!v.accessible) return false;
     if (a.floor > 1 && !v.elevator) return false;
   }
-  if (mobility === "colo" && a.floor > 1 && !v.elevator) return false;
+  if (mobs.includes("colo") && a.floor > 1 && !v.elevator) return false;
   return true;
 }
 
@@ -337,7 +363,7 @@ export function recommend(opts: {
 }): Recommendation[] {
   const { state, profile, fromVenueId, limit = 5, excludeIds = [], at = Date.now() } = opts;
   const now = festivalNow(state, at);
-  const mobility = profile?.mobility ?? "padrao";
+  const mobs = profileMobility(profile);
   const heat = (id: string) => venueHeat(id, state, at);
 
   const out: Recommendation[] = [];
@@ -351,10 +377,10 @@ export function recommend(opts: {
     const fill = activityFill(a, state, at);
     const status = fillStatus(fill, a, now);
     if (status.key === "lotado") continue;
-    const accessible = isAccessibleFor(a, mobility);
+    const accessible = isAccessibleFor(a, mobs);
     if (!accessible) continue;
 
-    const route = fromVenueId ? computeRoute(fromVenueId, a.venueId, mobility, heat) : null;
+    const route = fromVenueId ? computeRoute(fromVenueId, a.venueId, mobs, heat) : null;
     if (route && !route.ok) continue;
     const etaMin = route ? route.minutes : 8;
     if (!isLongRunning(a) && now + etaMin > s + 15) continue;
@@ -371,12 +397,12 @@ export function recommend(opts: {
     if (matches.length) reasons.push(`Combina com você: ${matches.slice(0, 3).join(", ")}`);
     if (route) reasons.push(`${etaMin} min a pé${route.avoided.length ? " por piso liso" : ""}`);
     reasons.push(`${Math.max(0, Math.round(a.capacity * vacancy))} vagas`);
-    if (a.libras && (mobility === "visual" || profile?.needs.includes("libras"))) reasons.push("Tem Libras");
-    if (a.audiodescricao && mobility === "visual") {
+    if (a.libras && profile?.needs.includes("libras")) reasons.push("Tem Libras");
+    if (a.audiodescricao && mobs.includes("visual")) {
       score += 0.08;
       reasons.push("Tem audiodescrição");
     }
-    if (mobility === "sensorial" || mobility === "colo") score -= (heat(a.venueId) / 100) * 0.12;
+    if (mobs.includes("sensorial") || mobs.includes("colo")) score -= (heat(a.venueId) / 100) * 0.12;
 
     // Distribuição de fluxo: só reordena entre opções que JÁ combinam com o perfil.
     let balanced = false;

@@ -495,6 +495,11 @@ export const MOBILITY_LABEL: Record<Mobility, { label: string; icon: string; hin
   sensorial: { label: "Sensibilidade sensorial", icon: "🎧", hint: "Evita multidão e barulho" },
 };
 
+/** Rótulo combinado para múltipla escolha: "♿ Cadeira de rodas + 👶 Com criança de colo". */
+export function mobilityText(ms: Mobility[], withIcon = true) {
+  return ms.map((m) => `${withIcon ? MOBILITY_LABEL[m].icon + " " : ""}${MOBILITY_LABEL[m].label}`).join(" + ");
+}
+
 export type Persona = {
   id: string;
   name: string;

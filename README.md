@@ -2,7 +2,36 @@
 
 Check-in de contexto por **tag NFC** + agente de mobilidade e acessibilidade para o Bairro do Recife.
 
+![RecPass: painel da organização no desktop e app do participante no celular](docs/img/hero.png)
+
 📚 Documentação completa (pesquisa, arquitetura, tags, painel, custos, pitch e roadmap) em [`docs/`](docs/README.md).
+
+## Demo
+
+<p align="center">
+  <img src="docs/img/recpass-demo.gif" alt="Demonstração do RecPass: check-in por tag NFC, sala lotada com alternativas, modo guia, recomendações, rota acessível, agente, perfil e painel da organização" width="900">
+</p>
+
+## Principais funcionalidades
+
+O app do participante foi feito para o **celular**; o painel da organização, para o **desktop**.
+
+| | | |
+|:---:|:---:|:---:|
+| ![Check-in por tag NFC](docs/img/feat-checkin-nfc.png) | ![Sala lotada e alternativas](docs/img/feat-sala-lotada.png) | ![Modo guia do patrimônio](docs/img/feat-modo-guia.png) |
+| **Check-in por tag NFC**<br>Encostou o celular, abriu a página daquele andar e daquela sala. Sem app e sem GPS. | **Sala lotada → alternativas**<br>Se lotou, mostra atividades parecidas que ainda dão tempo de alcançar. | **Modo guia do patrimônio**<br>A história do prédio em 30 s, em áudio, na própria tag. |
+| ![Agora: recomendações ao vivo](docs/img/feat-agora.png) | ![Rota por perfil de mobilidade](docs/img/feat-mapa-rota.png) | ![Agente por texto e voz](docs/img/feat-agente.png) |
+| **Agora**<br>Recomendações para o seu perfil, com a lotação em forma de "bateria". | **Rota por perfil de mobilidade**<br>Cadeira de rodas, criança de colo, baixa visão: evita paralelepípedo e degraus. | **Agente por texto e voz**<br>Responde com rota, lotação e alternativas usando as mesmas ferramentas do app. |
+| ![Perfil e arquétipos](docs/img/feat-perfil.png) | | |
+| **Perfil e arquétipos**<br>Diagnóstico de 1 min (Chico Science, Ariano, Nassau…) ou contas demo. | | |
+
+### Painel da organização (desktop)
+
+![Painel da organização: mapa de calor, sugestões, polos e check-ins ao vivo](docs/img/feat-painel-org.png)
+
+Mapa de calor dos polos, check-ins NFC ao vivo, sugestões do sistema e o botão **Destacar**, que leva público de um polo cheio para um vazio.
+
+> As imagens foram geradas a partir do app rodando localmente, com a conta demo "Marcos, cadeirante" e o relógio da simulação em 14:25.
 
 ## Rodar
 

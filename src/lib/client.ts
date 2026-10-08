@@ -67,6 +67,15 @@ export function useShared() {
   return { state, at: tick + skew, online };
 }
 
+// ---------- Montagem no cliente ----------
+
+const noopSubscribe = () => () => {};
+
+/** false no servidor e na hidratação; true depois de montar. Evita divergência de hora/lotação entre servidor e celular. */
+export function useMounted() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
 // ---------- Persistência local (perfil e última posição) ----------
 
 function localStore<T>(key: string) {
