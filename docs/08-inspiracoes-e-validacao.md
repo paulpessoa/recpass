@@ -30,10 +30,10 @@ Nas estações antigas, confusas e cheias de corredores de Paris, o Citymapper d
 ### 4. O atendente remoto na rodoviária de Valladolid (2021)
 Na rodoviária de Valladolid, um atendente apareceu na tela da máquina de passagens, vindo de uma central remota. Conversei com ele, passei o cartão, e **a própria máquina emitiu a passagem**. Atendimento humano à distância e ação física no local. → É a inspiração do nosso modelo híbrido: a tag dá o contexto, o agente de IA atende primeiro, e um humano (central ou equipe do evento) entra quando precisa.
 
-### 5. *Making Matter* — dar valor ao que já existe
-> ⚠️ Antes de citar no pitch, confirmar o título exato, o autor e a edição do livro.
+### 5. *Making Matter What Too Often Does Not Matter* — Søren Pihlmann e Adam Dickinson (2025)
+Livro do arquiteto dinamarquês **Søren Pihlmann** (Pihlmann Architects) em diálogo com o poeta **Adam Dickinson**, publicado em 2025 junto ao **Pavilhão da Dinamarca na Bienal de Arquitetura de Veneza**, exposição encomendada pelo próprio **Danish Architecture Center (DAC)** e com curadoria de Pihlmann. Subtítulo: *Material Protagonists of a Site-Derived Architecture*. Editoras: Arkitektens Forlag (Danish Architectural Press) e Koenig Books. A ligação com a visita ao DAC em Copenhague é direta.
 
-A ideia central é **trabalhar com o material e o lugar que já existem**, recuperando e valorizando em vez de demolir e começar do zero. No RecPass ela aparece em dois lugares:
+A ideia central é uma arquitetura que **nasce do lugar e do material que já existem**, recuperando e valorizando em vez de demolir e começar do zero. No RecPass ela aparece em dois lugares:
 - **Perfis de usuário:** os arquétipos do diagnóstico vêm da cultura local (Chico Science, Ariano Suassuna, Nassau, Paulo Freire, Naná Vasconcelos, Clarice Lispector). A identidade do participante se conecta à memória da cidade.
 - **História das edificações:** ao encostar o celular, o modo guia conta em 30 segundos a história do prédio (o telégrafo que virou Paço do Frevo, o convento que virou Alfândega, o armazém que virou Cais do Sertão). A tecnologia serve para **ler** o patrimônio, não para competir com ele.
 

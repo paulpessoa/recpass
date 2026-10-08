@@ -38,7 +38,7 @@
 
 - [ ] **Números da caminhada de campo** (passos e minutos de manhã e à tarde): `docs/08` e slide 4 do deck, onde está `[__]`.
 - [ ] **Resultado do teste no almoço:** quantas pessoas e frases marcantes, também no doc 08 e no slide 4.
-- [ ] **Confirmar título e autor de *Making Matter*** antes de citar.
+- [x] *Making Matter What Too Often Does Not Matter*: Søren Pihlmann e Adam Dickinson, 2025, Pavilhão da Dinamarca em Veneza, encomendado pelo DAC (ver doc 08).
 - [ ] Confirmar que o DAC fica no edifício BLOX.
 - [ ] Coordenadas e acessos reais dos polos. Hoje são aproximados; o Moinho e o Cais do Sertão foram ajustados pelo relato do Paul.
 - [ ] Decidir se a pasta local muda de `rota-livre` para `recpass`.
@@ -58,6 +58,11 @@
 5. Perguntas finais: "Usaria no REC'n'Play? O que faltou? Instalaria na tela inicial?"
 
 **O que anotar:** perfil da pessoa (idade, como chega ao evento, se tem alguma deficiência), onde travou, frases marcantes e tempo até entender. Depois, levar para o doc 08 e para o slide 4.
+
+## Bugs em aberto
+
+- **"This page couldn't load" no `/agente` ao receber a resposta.** Acontece no Chrome real do Paul, inclusive na emulação de iPhone, mas não num navegador limpo nem localmente. Suspeitas: extensão do Chrome ou VLibras mexendo no HTML. Agora existe o `src/app/error.tsx`, que mostra a mensagem real: reproduzir e ler o erro. Testar também numa janela anônima, sem extensões.
+- **Gemini 429 (cota excedida):** a chave atingiu o limite do plano gratuito. O app cai no modo regras. Para ter IA de novo: ativar cobrança no projeto do Google AI Studio ou esperar a cota renovar.
 
 ## Próximos passos de produto
 
