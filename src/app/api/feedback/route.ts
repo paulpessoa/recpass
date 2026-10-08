@@ -42,6 +42,10 @@ export async function POST(request: Request) {
     context,
   };
 
-  const where = await saveFeedback(fb);
-  return Response.json({ ok: true, storage: where });
+  try {
+    const where = await saveFeedback(fb);
+    return Response.json({ ok: true, storage: where });
+  } catch (e) {
+    return Response.json({ ok: false, error: e instanceof Error ? e.message : "falha ao salvar" }, { status: 502 });
+  }
 }

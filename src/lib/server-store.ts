@@ -152,6 +152,7 @@ export type Feedback = {
 
 const gf = globalThis as unknown as { __recpassFeedback?: (Feedback & { at: number })[] };
 
+/** Sem Supabase, guarda na memória (dev). Com Supabase, uma falha no insert é lançada: na Vercel a memória se perde. */
 export async function saveFeedback(fb: Feedback): Promise<"supabase" | "memoria"> {
   const sb = supabase();
   if (sb) {
@@ -169,7 +170,8 @@ export async function saveFeedback(fb: Feedback): Promise<"supabase" | "memoria"
       context: fb.context,
     });
     if (!error) return "supabase";
-    console.error("supabase feedback insert failed, usando memória", error);
+    console.error("supabase feedback insert failed", error);
+    throw new Error(`supabase: ${error.message}${error.code ? ` (${error.code})` : ""}`);
   }
   (gf.__recpassFeedback ??= []).unshift({ ...fb, at: Date.now() });
   return "memoria";

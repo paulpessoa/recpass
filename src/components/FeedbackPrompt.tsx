@@ -134,6 +134,7 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
   const [contact, setContact] = useState("");
   const [canContact, setCanContact] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const toggle = (x: string) => setLiked((l) => (l.includes(x) ? l.filter((y) => y !== x) : [...l, x]));
 
@@ -147,9 +148,12 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ rating, recommend, wouldUse, liked, missing, area, role, name, contact, canContact: canContact && !!contact, context }),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      if (!res.ok || !data?.ok) throw new Error(data?.error ?? `HTTP ${res.status}`);
       onSent();
-    } catch {
+    } catch (err) {
+      console.error("feedback não enviado", err);
+      setErrorMsg(err instanceof Error ? err.message : null);
       setStatus("error");
     }
   }
@@ -275,7 +279,12 @@ function FeedbackForm({ onCancel, onSent, context }: { onCancel: () => void; onS
         </label>
       </fieldset>
 
-      {status === "error" && <p className="text-sm text-red-600">Não consegui enviar. Confira a internet e tente de novo.</p>}
+      {status === "error" && (
+        <p role="alert" className="text-sm text-red-600">
+          Não consegui enviar. Confira a internet e tente de novo.
+          {errorMsg && <span className="mt-1 block text-xs text-red-400">Detalhe: {errorMsg}</span>}
+        </p>
+      )}
 
       <button
         type="submit"
