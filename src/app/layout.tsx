@@ -28,10 +28,15 @@ export const viewport: Viewport = {
 // Registro do service worker (PWA), fora da árvore do React.
 const BOOT = `
 (function () {
-  if ("serviceWorker" in navigator) {
-    var reg = function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); };
-    if (document.readyState === "complete") reg(); else window.addEventListener("load", reg);
+  if (!("serviceWorker" in navigator)) return;
+  // No dev local os chunks não mudam de nome entre edições: o cache do SW serviria código velho.
+  if (/^(localhost|127\\.0\\.0\\.1|\\[::1\\])$/.test(location.hostname)) {
+    navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); });
+    if (window.caches) caches.keys().then(function (ks) { ks.forEach(function (k) { caches.delete(k); }); });
+    return;
   }
+  var reg = function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); };
+  if (document.readyState === "complete") reg(); else window.addEventListener("load", reg);
 })();
 `;
 
