@@ -14,9 +14,16 @@
 - [ ] Teste de usabilidade com os 7 perfis
 - [ ] Ponto de encontro de grupo com localização compartilhada
 
+## Limite da IA (antes de abrir para o público)
+- [ ] Teto geral de gasto por hora e por dia no servidor; passou disso, modo regras
+- [ ] Cota por aparelho no servidor, com ID anônimo, mostrada na interface
+- [ ] IA liberada só com o passe da tag (assinado, 2 h)
+- [ ] Login opcional só para extras (nunca obrigatório)
+
 ## Depois
 - [ ] Integração com o app oficial do REC'n'Play, como módulo dentro dele
-- [ ] Servidor MCP com a programação e a acessibilidade, para quem quiser usar o próprio agente
+- [ ] **Servidor MCP** (`/api/mcp`) com as 4 ferramentas do agente: Claude, apps do ChatGPT e Gemini CLI. Quem paga a IA é o assistente do usuário
+- [ ] App no ChatGPT com cartões visuais (planejar antes de sair de casa)
 - [ ] Integração com Alexa e com totens que usam a mesma lógica de atendimento (humano ou IA)
 - [ ] Bloqueios da CTTU em tempo real
 - [ ] Levar para o Carnaval, o São João e Olinda
