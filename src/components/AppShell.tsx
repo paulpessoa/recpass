@@ -40,8 +40,8 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
           </div>
         </div>
         <div className="mt-2 flex items-center gap-2 text-xs">
-          <Link href="/perfil" className="truncate rounded-full bg-white/15 px-2.5 py-1">
-            {profile ? `${profile.avatar} ${profile.name} · ${profileMobility(profile).map((m) => MOBILITY_LABEL[m].icon).join("")}` : "👤 Escolher perfil"}
+          <Link href={profile ? "/perfil" : "/perfil?quiz=1"} className="truncate rounded-full bg-white/15 px-2.5 py-1">
+            {profile ? `${profile.avatar} ${profile.name} · ${profileMobility(profile).map((m) => MOBILITY_LABEL[m].icon).join("")}` : "👤 Montar meu perfil"}
           </Link>
           {here && <span className="truncate rounded-full bg-white/15 px-2.5 py-1">📍 {here.short}</span>}
         </div>

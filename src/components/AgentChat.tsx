@@ -6,7 +6,7 @@ import { activityById, archetypeById, venueById } from "@/lib/data";
 import { askAgent, speak, useLocation, useProfile, useShared, type ChatMsg } from "@/lib/client";
 import { computeRoute, profileMobility, recommend, venueHeat, type Profile } from "@/lib/engine";
 import type { AgentCard } from "@/lib/agent-tools";
-import { AgentOnboarding } from "./AgentOnboarding";
+import { ProfileQuiz } from "./ProfileQuiz";
 import { ActivityCard } from "./ActivityCard";
 import { RouteSummary } from "./RouteSummary";
 
@@ -54,16 +54,12 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuestion, profile]);
 
-  function onboarded(p: Profile, viaDemo: boolean) {
+  function onboarded(p: Profile) {
     setProfile(p);
     const from = loc?.venueId ?? "marco-zero";
     const recs = recommend({ state, profile: p, fromVenueId: from, limit: 3, at });
     const arch = archetypeById(p.archetypeId);
-    const hello = viaDemo
-      ? `Entrando como ${p.name}. `
-      : arch
-        ? `Prontinho! Seu arquétipo é ${arch.emoji} ${arch.figure} — ${arch.name}: ${arch.tagline.toLowerCase()}. `
-        : "Prontinho! ";
+    const hello = arch ? `Prontinho! Seu arquétipo é ${arch.emoji} ${arch.figure} — ${arch.name}: ${arch.tagline.toLowerCase()}. ` : "Prontinho! ";
     setMsgs([
       {
         role: "assistant",
@@ -89,7 +85,15 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
 
   const mobility = profileMobility(profile);
 
-  if (!profile) return <AgentOnboarding intro={greeting} onDone={onboarded} />;
+  if (!profile)
+    return (
+      <div className="space-y-3">
+        <div className="max-w-[88%] rounded-2xl bg-white px-3.5 py-2.5 text-sm shadow-sm ring-1 ring-black/5">
+          {greeting ?? "Oi!"} Antes, responda 5 perguntas rápidas: assim eu acerto nas rotas e nas sugestões.
+        </div>
+        <ProfileQuiz onDone={onboarded} />
+      </div>
+    );
 
   return (
     <div className="flex flex-col">

@@ -18,7 +18,7 @@
 - **Tag NFC:** `/t/<id>` mostra o "você está aqui", a lotação em bateria, alternativas se lotou, o acesso universal (escadaria, elevador, escada rolante), a história do prédio (modo guia) e o agente.
 - **Motor sem IA:** rotas por perfil de mobilidade (múltipla escolha, com os pesos somados), lotação simulada, recomendações e distribuição de fluxo.
 - **Agente:**
-  - Começa pelo **diagnóstico em 4 toques**, sem IA: arquétipos Chico Science, Ariano, Nassau, Paulo Freire, Naná e Clarice.
+  - Começa pelo **diagnóstico de perfil**, sem IA: 5 perguntas, uma por tela (`ProfileQuiz`), que dão os arquétipos Chico Science, Ariano, Nassau, Paulo Freire, Naná e Clarice. É o **único** caminho: o mesmo componente aparece no agente (inclusive na tela da tag) e em `/perfil?quiz=1`, para onde levam o banner da home e o chip do topo. As contas demo ficaram recolhidas no `/perfil`, só para a apresentação.
   - Um roteador econômico responde o óbvio sem IA; o Gemini fica só para conversa aberta.
   - Cada resposta termina com atalhos para a lista filtrada (`/?ids=`) e para o mapa.
 - **Voz:** chamada flutuante com cota de 3 min a cada 2 h (controlada no navegador). O VLibras foi removido por enquanto.
@@ -48,13 +48,13 @@
 
 **Preparação**
 1. Gravar as tags pelo `/tags`: `paco-frevo`, `paco-alfandega-escadaria`, `moinho-andar-3`, `cais-sertao` e `nerd-terreo`.
-2. No `/org`, colocar o relógio em **14:25** e clicar em *Resetar*.
+2. No `/org`, colocar o relógio em **14:25** e clicar em *Resetar*. **Atenção:** o relógio do festival continua correndo depois de ajustado; no dia seguinte ele passa de 24h e a programação some. Antes de cada teste, acerte o relógio no `/org` para a hora atual.
 3. Instalar o PWA num Android de teste e conferir se o "This page couldn't load" sumiu (a correção já está no ar).
 
 **Roteiro com cada pessoa (5 minutos)**
 1. Sem explicar nada, entregar o celular e pedir: "encoste nessa tag".
 2. Observar: ela entende o "você está aqui"? E a bateria de lotação?
-3. Pedir o diagnóstico com o agente: ela conclui os 4 toques? O que acha do arquétipo?
+3. Pedir o diagnóstico de perfil: ela conclui as 5 perguntas sem ajuda? O que acha do arquétipo?
 4. Perguntar "tá lotado, e agora?": ela usa os botões "Ver na lista" e "Abrir no mapa"?
 5. Perguntas finais: "Usaria no REC'n'Play? O que faltou? Instalaria na tela inicial?"
 

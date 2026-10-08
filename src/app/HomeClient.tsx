@@ -32,10 +32,10 @@ export function HomeClient({ ids }: { ids: string[] }) {
   return (
     <AppShell>
       {!profile && (
-        <Link href="/agente" className="mb-5 flex items-center gap-3 rounded-2xl bg-[#f26b1d] p-3 text-white shadow-sm">
-          <span className="text-2xl">💬</span>
+        <Link href="/perfil?quiz=1" className="mb-5 flex items-center gap-3 rounded-2xl bg-[#f26b1d] p-3 text-white shadow-sm">
+          <span className="text-2xl">🧬</span>
           <span className="text-sm">
-            <b className="block">Personalize em 4 toques</b>
+            <b className="block">Monte seu perfil em 1 minuto</b>
             O agente descobre se você é Chico Science ou Ariano Suassuna — e como você circula.
           </span>
         </Link>

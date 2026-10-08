@@ -1,4 +1,4 @@
-// Autodiagnóstico: compartilhado entre a tela de Perfil e o onboarding conversado do agente (sem IA, custo zero).
+// Autodiagnóstico (sem IA, custo zero): perguntas e pontuação usadas pelo componente ProfileQuiz.
 import { ARCHETYPES, archetypeById, type Mobility } from "./data";
 import { primaryMobility, type Profile } from "./engine";
 
@@ -21,6 +21,13 @@ export const PLACES: { label: string; id: string }[] = [
 ];
 
 export const TOPICS = ["ia", "dev", "carreira", "startups", "investimento", "negocios", "cidades", "mobilidade", "dados", "cultura", "patrimonio", "musica", "arte", "games", "xr", "design", "ux", "educacao", "acessibilidade", "diversidade", "hardware"];
+
+export const TOPIC_LABEL: Record<string, string> = {
+  ia: "IA", dev: "Programação", carreira: "Carreira", startups: "Startups", investimento: "Investimento", negocios: "Negócios",
+  cidades: "Cidades", mobilidade: "Mobilidade", dados: "Dados", cultura: "Cultura", patrimonio: "Patrimônio", musica: "Música",
+  arte: "Arte", games: "Games", xr: "Realidade estendida", design: "Design", ux: "UX", educacao: "Educação",
+  acessibilidade: "Acessibilidade", diversidade: "Diversidade", hardware: "Hardware",
+};
 
 export const NEEDS = ["libras", "audiodescrição", "evitar aglomeração", "fraldário", "sombra", "assento"];
 

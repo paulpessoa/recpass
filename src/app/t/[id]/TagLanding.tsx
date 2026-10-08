@@ -172,7 +172,7 @@ export function TagLanding({ id }: { id: string }) {
           <span className="text-2xl">💬</span>
           <span>
             <b className="block">Ainda não te conheço 🙂</b>
-            Responda 4 toques com o agente e a rota se adapta a você.
+            Monte seu perfil em 1 minuto e a rota se adapta a você.
           </span>
         </a>
       )}
