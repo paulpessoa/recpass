@@ -48,13 +48,13 @@ export default function OrgPage() {
     })
     .filter(Boolean) as { hot: (typeof VENUES)[number]; hotAct: ReturnType<typeof activityAt>; c: (typeof VENUES)[number]; act: (typeof ACTIVITIES)[number]; overlap: number }[];
 
-  if (!mounted) return <div className="min-h-dvh bg-[#0f1729]" />;
+  if (!mounted) return <div className="min-h-dvh bg-background" />;
 
   return (
-    <div className="min-h-dvh bg-[#0f1729] text-white">
+    <div className="min-h-dvh bg-background text-white">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-6 py-4">
         <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f26b1d] font-black">R</span>
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-accent font-black">R</span>
           <div>
             <h1 className="font-bold leading-tight">Painel da Organização · RecPass</h1>
             <p className="text-xs text-white/60">Distribuição de fluxo em tempo real · REC&apos;n&apos;Play · Bairro do Recife</p>
@@ -76,7 +76,7 @@ export default function OrgPage() {
           </div>
 
           <div className="overflow-hidden rounded-2xl ring-1 ring-white/10">
-            <Map heat={heat} boosted={Object.keys(state.boosts)} height={460} />
+            <Map heat={heat} boosted={Object.keys(state.boosts)} height={460} showHeat />
           </div>
 
           <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
@@ -97,7 +97,7 @@ export default function OrgPage() {
 
         <div className="space-y-4">
           {suggestions.length > 0 && (
-            <div className="rounded-2xl bg-[#f26b1d]/15 p-4 ring-1 ring-[#f26b1d]/40">
+            <div className="rounded-2xl bg-accent/15 p-4 ring-1 ring-accent/40">
               <h2 className="font-semibold">Sugestões do sistema</h2>
               <ul className="mt-2 space-y-3">
                 {suggestions.map((s) => (

@@ -32,7 +32,7 @@ export function HomeClient({ ids }: { ids: string[] }) {
   return (
     <AppShell>
       {!profile && (
-        <Link href="/agente" className="mb-5 flex items-center gap-3 rounded-2xl bg-[#f26b1d] p-3 text-white shadow-sm">
+        <Link href="/agente" className="mb-5 flex items-center gap-3 rounded-2xl bg-accent p-3 text-background shadow-sm">
           <span className="text-2xl">💬</span>
           <span className="text-sm">
             <b className="block">Personalize em 4 toques</b>
@@ -45,7 +45,7 @@ export function HomeClient({ ids }: { ids: string[] }) {
         <section className="mb-6">
           <div className="mb-2 flex items-baseline justify-between">
             <h2 className="text-lg font-bold">Sugestões do agente</h2>
-            <Link href="/" className="text-xs text-[#123b8c]">
+            <Link href="/" className="text-xs text-accent">
               limpar ✕
             </Link>
           </div>
@@ -60,13 +60,13 @@ export function HomeClient({ ids }: { ids: string[] }) {
       <section className="mb-6">
         <div className="mb-2 flex items-baseline justify-between">
           <h2 className="text-lg font-bold">Para você agora</h2>
-          <span className="text-xs text-gray-500">saindo de {venueById(from)?.short}</span>
+          <span className="text-xs text-muted">saindo de {venueById(from)?.short}</span>
         </div>
         <div className="space-y-3">
           {recs.map((r) => (
             <ActivityCard key={r.activity.id} a={r.activity} state={state} at={at} profile={profile} from={from} reasons={r.reasons} eta={r.etaMin} balanced={r.balanced} />
           ))}
-          {!recs.length && <p className="text-sm text-gray-500">Nada com vaga nas próximas horas. Que tal o mapa?</p>}
+          {!recs.length && <p className="text-sm text-muted">Nada com vaga nas próximas horas. Que tal o mapa?</p>}
         </div>
       </section>
 
@@ -77,7 +77,7 @@ export function HomeClient({ ids }: { ids: string[] }) {
             <button
               key={t}
               onClick={() => setTrack(t)}
-              className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${track === t ? "bg-[#123b8c] text-white" : "bg-white text-gray-700 ring-1 ring-black/10"}`}
+              className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${track === t ? "bg-accent text-background" : "bg-card text-foreground/85 ring-1 ring-white/10"}`}
             >
               {t}
             </button>
@@ -98,7 +98,7 @@ export function HomeClient({ ids }: { ids: string[] }) {
             <ActivityCard key={a.id} a={a} state={state} at={at} profile={profile} from={from} />
           ))}
         </div>
-        <p className="mt-6 text-center text-[11px] text-gray-400">POC · programação e lotação simuladas · coordenadas aproximadas</p>
+        <p className="mt-6 text-center text-[11px] text-muted">POC · programação e lotação simuladas · coordenadas aproximadas</p>
       </section>
     </AppShell>
   );

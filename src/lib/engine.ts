@@ -159,14 +159,17 @@ export type FillStatus = { key: "livre" | "enchendo" | "ultimas" | "lotado" | "e
 export function fillStatus(fill: number, a?: Activity, now?: number): FillStatus {
   if (a && now !== undefined && now >= actEnd(a)) return { key: "encerrada", label: "Encerrada", color: "#9CA3AF" };
   if (a && now !== undefined && now < actStart(a) - 50) return { key: "breve", label: "Em breve", color: "#60A5FA" };
-  if (fill >= 99) return { key: "lotado", label: "Lotado", color: "#DC2626" };
-  if (fill >= 85) return { key: "ultimas", label: "Últimas vagas", color: "#EA580C" };
-  if (fill >= 60) return { key: "enchendo", label: "Enchendo", color: "#CA8A04" };
-  return { key: "livre", label: "Vagas", color: "#16A34A" };
+  if (fill >= 99) return { key: "lotado", label: "Lotado", color: SEMAFORO.lotado };
+  if (fill >= 85) return { key: "ultimas", label: "Últimas vagas", color: SEMAFORO.lotado };
+  if (fill >= 60) return { key: "enchendo", label: "Enchendo", color: SEMAFORO.enchendo };
+  return { key: "livre", label: "Livre", color: SEMAFORO.livre };
 }
 
-export const heatColor = (h: number) =>
-  h >= 85 ? "#DC2626" : h >= 65 ? "#EA580C" : h >= 45 ? "#CA8A04" : "#16A34A";
+/** Semáforo de lotação (identidade visual): só três cores. */
+export const SEMAFORO = { livre: "#00C853", enchendo: "#FFEA00", lotado: "#D50000" } as const;
+
+export const heatLevel = (h: number): keyof typeof SEMAFORO => (h >= 85 ? "lotado" : h >= 55 ? "enchendo" : "livre");
+export const heatColor = (h: number) => SEMAFORO[heatLevel(h)];
 
 // ---------- Rotas por perfil de mobilidade ----------
 
