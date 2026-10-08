@@ -17,9 +17,13 @@
 | 0:50–1:50 | **Demo:** encostar o celular na tag do Paço do Frevo → "Lotou!" → alternativas a 5 minutos a pé. Trocar para o **Marcos (cadeirante)** → a rota desvia da Rua da Moeda. Encostar na tag da escadaria → "o acesso em nível fica pelos fundos". |
 | 1:50–2:20 | **Painel:** o Paço do Frevo está a 84% → clicar em *Destacar Armazéns* → a sugestão 🌿 aparece no celular. "Distribuímos o público sem passar por cima da escolha de ninguém." |
 | 2:20–2:45 | **Custo:** algoritmo primeiro, IA só na conversa. Cerca de R$ 3 mil para 100 mil pessoas, contra uns R$ 20 mil com orientadores humanos. Pode ser bancado por patrocínio ESG. |
-| 2:45–3:00 | **Fechamento:** "Substituímos barreiras de pedra por pontes de dados. Validamos hoje no almoço com quem estava por aqui." |
+| 2:35–2:50 | **De onde veio a ideia:** as tampas de Segóvia (infraestrutura invisível no piso histórico), o Citymapper (a saída certa num metrô antigo) e o atendente remoto de Valladolid (humano à distância, ação no local). E caminhamos pelo Recife Antigo de manhã e à tarde contando os passos ([preencher números]). |
+| 2:50–3:00 | **Fechamento:** "Substituímos barreiras de pedra por pontes de dados. Validamos hoje no almoço com quem estava por aqui." |
 
 ## Extras para 5 minutos
+
+- **Inspirações com mais calma:** o DAC em Copenhague e *Making Matter* (cultura local nos perfis e na história dos prédios). Ver [doc 08](08-inspiracoes-e-validacao.md).
+- **Bateria e PWA:** "não usamos GPS: a tag já marca onde você está. O app se instala na tela inicial e abre sem internet."
 
 - A chamada de voz ao vivo: "quero ir embora de Uber".
 - O guia do patrimônio: ouvir os 30 segundos da história do Paço do Frevo, que conecta com *Making Matter* e *Don't Make Me Think*.

@@ -11,6 +11,11 @@ A pessoa encosta o celular numa tag NFC (num poste, numa lixeira, num totem ou n
 - **Guia do patrimônio:** a história do prédio narrada em 30 segundos, opcional.
 - **O agente**, por texto ou por voz.
 
+## Sem GPS e instalável
+
+- **O app não usa GPS:** a posição é a da última tag lida. Isso economiza bateria e funciona entre casarões, onde o GPS erra.
+- **PWA:** `manifest.webmanifest` e um service worker (`public/sw.js`). Dá para instalar na tela inicial, e as páginas já visitadas, inclusive as das tags, abrem sem internet.
+
 ## Telas
 
 | Rota | Função |
@@ -18,7 +23,7 @@ A pessoa encosta o celular numa tag NFC (num poste, numa lixeira, num totem ou n
 | `/` | Recomendações e programação ao vivo, com filtros "só com vagas" e "acessível pra mim" |
 | `/t/[id]` | A tela que a tag abre |
 | `/mapa` | Mapa de calor e rota por perfil de mobilidade |
-| `/agente` | Chat. O botão 🎙️ flutuante abre a chamada de voz, com cota |
+| `/agente` | Começa pelo **diagnóstico em conversa** (4 toques, múltipla escolha, sem IA). Cada resposta termina com atalhos (lista filtrada `/?ids=`, rota no mapa). O botão 🎙️ abre a chamada de voz, com cota |
 | `/perfil` | Contas demo, autodiagnóstico e liga/desliga do modo guia |
 | `/org` | Painel da organização |
 | `/tags` | Gravação e leitura das tags |
