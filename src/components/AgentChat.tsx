@@ -29,7 +29,10 @@ export function AgentChat({ greeting, initialQuestion }: { greeting?: string; in
   const endRef = useRef<HTMLDivElement>(null);
   const asked = useRef(false);
 
-  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [msgs, busy]);
+  // Chaves de propósito: no Chrome novo scrollIntoView devolve uma Promise, e o React a trataria como cleanup ("i is not a function").
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [msgs, busy]);
 
   async function send(text: string) {
     if (!text.trim() || busy) return;

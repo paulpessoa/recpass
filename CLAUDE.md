@@ -13,6 +13,7 @@ POC do Ideathon P&D 2026 (REC'n'Play, Bairro do Recife): uma tag NFC abre `/t/<i
 - **Dados mock:** `src/lib/data.ts` (locais, ruas e tipos de piso, programação, contas demo, arquétipos, tags). Histórias dos prédios: `src/lib/heritage.ts`. Diagnóstico: `src/lib/quiz.ts`.
 - **Estado compartilhado:** `src/lib/server-store.ts` usa o Supabase quando `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` existem; senão, a memória do servidor.
 - **Tudo que depende de hora** só aparece depois de montar (`useMounted`), para evitar erro de hidratação. O service worker é registrado fora do React (`src/app/layout.tsx`); o VLibras foi removido (mexia no HTML do React).
+- **`useEffect` sempre com chaves** (`useEffect(() => { ... })`): APIs como `scrollIntoView` passaram a devolver Promise no Chrome, e um retorno implícito vira um cleanup inválido (`i is not a function`).
 - **Antes de commitar:** `npx tsc --noEmit && npx eslint src && npm run build`. O push na `main` publica na Vercel.
 
 ## Armadilhas do ambiente
