@@ -37,7 +37,7 @@ Mapa de calor dos polos, check-ins NFC ao vivo, sugestões do sistema e o botão
 
 ```bash
 npm install
-cp .env.example .env.local   # opcional: GEMINI_API_KEY e SUPABASE_* (sem elas: modo regras + estado em memória)
+cp .env.example .env.local   # opcional: OPENAI_API_KEY (ou GEMINI_API_KEY) e SUPABASE_* (sem elas: modo regras + estado em memória)
 npm run dev                   # http://localhost:3000
 ```
 
@@ -57,7 +57,7 @@ npm run dev                   # http://localhost:3000
 
 - **Sem IA (custo zero, roda no aparelho):** rotas (Dijkstra com peso de piso, degraus e multidão por perfil), lotação, recomendações e a distribuição de fluxo — tudo em `src/lib/engine.ts`.
 - **Roteador econômico:** perguntas com intenção clara (rota, banheiro, embarque) são respondidas por `agent-fallback.ts` sem chamar a IA.
-- **IA só para conversa aberta:** Gemini 3.5 Flash-Lite (`GEMINI_MODEL` permite trocar), que conversa e chama as ferramentas determinísticas. Sem internet, cai para as regras.
+- **IA só para conversa aberta:** OpenAI `gpt-4.1-mini` (ou Gemini Flash-Lite, conforme a chave configurada), que conversa e chama as ferramentas determinísticas. Sem internet, cai para as regras.
 
 ## Supabase
 

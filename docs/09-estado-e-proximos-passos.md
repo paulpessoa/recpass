@@ -9,7 +9,7 @@
 | App em produção | https://recpass.vercel.app (deploy automático a cada push na `main`) |
 | Código | github.com/paulpessoa/recpass (público) · pasta local `ideathon/rota-livre` (o nome antigo ficou na pasta) |
 | Banco | Supabase, projeto **recpass**: tabelas `festival_settings`, `venue_boosts` e `tag_taps`. A integração com o GitHub aplica as migrações da `main` |
-| IA | Gemini `gemini-3.5-flash-lite` (troque com `GEMINI_MODEL`), chave `GEMINI_API_KEY` na Vercel e no `.env` local |
+| IA | **OpenAI `gpt-4.1-mini`** (troque com `OPENAI_MODEL`), chave `OPENAI_API_KEY` na Vercel e no `.env.local`. O Gemini continua como alternativa automática quando não há chave da OpenAI (`src/lib/llm.ts`) |
 | Slides do pitch | Artifact "RecPass — Pitch Ideathon P&D" no claude.ai (13 slides, roteiro nas notas) |
 | Docs | `docs/01`–`08`: pesquisa, arquitetura, tags, painel, custos, pitch, roadmap, inspirações |
 
@@ -29,7 +29,7 @@
 ## Decisões tomadas (e o porquê)
 
 - **Algoritmo primeiro, IA só na conversa:** o custo fica previsível para 50 a 100 mil pessoas (cerca de R$ 3 mil com IA, contra uns R$ 20 mil com orientadores humanos; ver doc 05).
-- **Gemini Flash-Lite, não Anthropic:** escolha do Paul, pelo preço e pela velocidade.
+- **OpenAI `gpt-4.1-mini` (8/out):** o Gemini parou por um problema de faturamento na conta Google. No teste, o mini acertou mais que o `gpt-4.1-nano` (2,6 s, mas com erros) e responde em cerca de 6 s com duas chamadas de ferramenta. O provedor é escolhido pela chave presente. Anthropic não, por escolha do Paul.
 - **Sem login:** o perfil fica no celular (localStorage), e a tag só diz *onde*, nunca *quem*. **Não usar IP para identificar pessoas:** o IP é compartilhado (CGNAT, Wi-Fi do evento) e muda; usá-lo mostraria dados de uma pessoa para outra. Frase do pitch: *"privacidade desde o desenho"*.
 - **Cada tag guarda só um ID:** o significado fica no servidor, e dá para mudá-lo sem regravar a tag.
 - **Painel ético:** nunca esconde atividade, mostra o selo 🌿 e só reordena o que já combina pelo menos 50% com o perfil.
@@ -62,7 +62,7 @@
 ## Bugs em aberto
 
 - **"This page couldn't load" (resolvido em 8/out).** O console mostrava `Uncaught TypeError: i is not a function` num arquivo minificado, ao navegar depois de vários deploys com a aba aberta. Causa: a aba antiga misturava código de duas versões. Correção: `deploymentId` no `next.config.ts` (usa o `VERCEL_DEPLOYMENT_ID`), que faz a aba recarregar a página inteira quando a versão muda. Por precaução, o VLibras também foi removido, e foram criados o `error.tsx` e o `global-error.tsx`, que mostram a mensagem real se algo quebrar.
-- **Gemini 429 (cota excedida):** a chave atingiu o limite do plano gratuito. O app cai no modo regras. Para ter IA de novo: ativar cobrança no projeto do Google AI Studio ou esperar a cota renovar.
+- **Gemini 429 / faturamento:** a conta Google está com problema de cobrança. Trocamos para a OpenAI. Quando resolver, dá para voltar ao Gemini removendo `OPENAI_API_KEY` da Vercel.
 
 ## Próximos passos de produto
 

@@ -8,10 +8,10 @@
 |---|---|---|
 | Algoritmo no aparelho | rota adaptada, lotação, recomendações, filtros, mapa | **R$ 0** |
 | Roteador econômico | "como chego no Moinho?", "banheiro", "quero ir embora" | **R$ 0** |
-| Agente com IA (Gemini 3.5 Flash-Lite) | conversa aberta, montar perfil conversando, dúvidas compostas | ~US$ 0,003 por resposta |
+| Agente com IA (OpenAI gpt-4.1-mini; alternativa: Gemini Flash-Lite) | conversa aberta, montar perfil conversando, dúvidas compostas | ~US$ 0,003 por resposta |
 | Voz | reconhecimento e fala do navegador | **R$ 0** (o que custa é a IA, e a cota limita o uso) |
 
-O Gemini 3.5 Flash-Lite custa US$ 0,30 por milhão de tokens de entrada e US$ 2,50 por milhão de saída (tabela de out/2026), e tem camada gratuita para desenvolvimento e demo. Uma resposta típica usa cerca de 6.500 tokens de entrada (prompt, ferramentas, histórico e resultados) e uns 500 de saída, o que dá **cerca de US$ 0,003**.
+O `gpt-4.1-mini` custa US$ 0,40 por milhão de tokens de entrada e US$ 1,60 por milhão de saída (tabela de out/2026). O Gemini 3.5 Flash-Lite, a alternativa, custa US$ 0,30 e US$ 2,50. Os dois dão praticamente o mesmo custo por resposta. Uma resposta típica usa cerca de 6.500 tokens de entrada (prompt, ferramentas, histórico e resultados) e uns 500 de saída, o que dá **cerca de US$ 0,003**.
 
 ## Cenário: 100 mil participantes em 4 dias
 
