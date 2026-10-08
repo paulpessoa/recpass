@@ -62,6 +62,7 @@
 ## Bugs em aberto
 
 - **"This page couldn't load" (resolvido em 8/out).** O console mostrava `Uncaught TypeError: i is not a function` num arquivo minificado, ao navegar depois de vários deploys com a aba aberta. Causa: a aba antiga misturava código de duas versões. Correção: `deploymentId` no `next.config.ts` (usa o `VERCEL_DEPLOYMENT_ID`), que faz a aba recarregar a página inteira quando a versão muda. Por precaução, o VLibras também foi removido, e foram criados o `error.tsx` e o `global-error.tsx`, que mostram a mensagem real se algo quebrar.
+- **Ainda investigar:** às 3h42 de 8/out, no celular do Paul (Android/Chrome), a tela `error.tsx` mostrou `TypeError: i is not a function` em `_next/static/immutable/chunks/o74suocum.js:31` (funções iE → uT → uN → uC). O erro foi capturado pela fronteira de erro da página, não pela global. Talvez a aba fosse anterior ao deploy com `deploymentId`. Se repetir numa aba nova, abrir o chunk com o source map (`npm run build` local) e localizar a função `iE`.
 - **Gemini 429 / faturamento:** a conta Google está com problema de cobrança. Trocamos para a OpenAI. Quando resolver, dá para voltar ao Gemini removendo `OPENAI_API_KEY` da Vercel.
 
 ## Próximos passos de produto
