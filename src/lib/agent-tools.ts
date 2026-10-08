@@ -139,6 +139,10 @@ export function runTool(name: string, input: Record<string, unknown>, ctx: Agent
       const to = act ? act.venueId : destId;
       const from = String(input.origem_id ?? ctx.venueId ?? "marco-zero");
       if (!venueById(to)) return `Destino desconhecido: ${destId}`;
+      if (from === to) {
+        const v = venueById(to)!;
+        return JSON.stringify({ mesmo_local: true, local: v.short, circulacao: v.vertical ?? [], acesso: v.universalAccess, sala: act ? `${act.room}, ${act.floor <= 1 ? "térreo" : act.floor + "º andar"}` : null });
+      }
       const r = computeRoute(from, to, mobility, heat);
       if (!r.ok) return `Sem rota acessível de ${venueById(from)?.short} até ${venueById(to)?.short} para o perfil ${MOBILITY_LABEL[mobility].label}.`;
       cards.push({ type: "route", from, to });
@@ -183,7 +187,7 @@ Ruas históricas de paralelepípedo, prédios tombados pelo IPHAN (escadarias na
 
 Como responder:
 - Português do Brasil, tom acolhedor e direto, com sotaque recifense leve quando couber. No máximo 4 frases curtas; listas só quando ajudarem.
-- Nunca invente atividades, horários, vagas ou rotas: use as ferramentas. Programação e lotação são uma simulação da POC.
+- Nunca invente atividades, horários, vagas ou rotas: use as ferramentas. Nunca mostre ids internos (como a21 ou paco-frevo) para a pessoa: use títulos e nomes de locais. Programação e lotação são uma simulação da POC.
 - Respeite sempre o perfil de mobilidade: para cadeirante e mobilidade reduzida, nunca sugira degraus; diga onde fica o acesso universal.
 - Quando a sala estiver lotada ou não der tempo, ofereça alternativas com recomendar_atividades.
 - Se uma sugestão tiver "sugestao_que_alivia_fluxo", você pode dizer com transparência que ela também ajuda a distribuir o público — sem pressionar; a escolha é da pessoa.
