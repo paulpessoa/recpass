@@ -29,8 +29,8 @@ export const TOOL_DEFS = [
     name: "recomendar_atividades",
     description:
       "Recomenda atividades que começam em breve, já filtradas por vagas, acessibilidade do perfil e tempo de deslocamento a partir de onde a pessoa está. Use sempre que a pessoa pedir sugestões, alternativas a uma sala lotada ou 'o que fazer agora'.",
-    input_schema: {
-      type: "object" as const,
+    parameters: {
+      type: "object",
       properties: {
         quantidade: { type: "integer", description: "Quantas sugestões (1-5). Padrão 3." },
         tema: { type: "string", description: "Tema opcional para filtrar, ex.: 'ia', 'cultura', 'carreira'." },
@@ -40,8 +40,8 @@ export const TOOL_DEFS = [
   {
     name: "buscar_atividades",
     description: "Busca na programação por texto, tema ou local e devolve horário, local, lotação e recursos de acessibilidade.",
-    input_schema: {
-      type: "object" as const,
+    parameters: {
+      type: "object",
       properties: {
         texto: { type: "string", description: "Palavra-chave no título ou tema." },
         local_id: { type: "string", description: `Id do local. Opções: ${VENUES.map((v) => v.id).join(", ")}` },
@@ -52,8 +52,8 @@ export const TOOL_DEFS = [
     name: "calcular_rota",
     description:
       "Calcula a rota a pé adaptada ao perfil de mobilidade (desvia de paralelepípedo, degraus e multidão quando necessário) a partir do local atual até um local ou atividade.",
-    input_schema: {
-      type: "object" as const,
+    parameters: {
+      type: "object",
       properties: {
         destino_id: { type: "string", description: "Id do local (ex.: 'moinho') ou da atividade (ex.: 'a21')." },
         origem_id: { type: "string", description: "Opcional. Id do local de origem, se diferente do atual." },
@@ -64,8 +64,8 @@ export const TOOL_DEFS = [
   {
     name: "status_local",
     description: "Mostra lotação do entorno, atividade atual, acessos (rampa/elevador/escada) e comodidades (fraldário, sombra, banheiro) de um local, incluindo pontos de embarque.",
-    input_schema: {
-      type: "object" as const,
+    parameters: {
+      type: "object",
       properties: { local_id: { type: "string", description: "Id do local." } },
       required: ["local_id"],
     },

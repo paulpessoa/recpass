@@ -16,7 +16,7 @@
 | 0:20–0:50 | **O problema:** o Bairro do Recife é tombado, então não dá para pôr rampa nem placa. O GPS não sabe dos bloqueios, e quem é cadeirante enfrenta o paralelepípedo. Nas 4 entrevistas, a dor número 1 foi descobrir a lotação só na porta. |
 | 0:50–1:50 | **Demo:** encostar o celular na tag do Paço do Frevo → "Lotou!" → alternativas a 5 minutos a pé. Trocar para o **Marcos (cadeirante)** → a rota desvia da Rua da Moeda. Encostar na tag da escadaria → "o acesso em nível fica pelos fundos". |
 | 1:50–2:20 | **Painel:** o Paço do Frevo está a 84% → clicar em *Destacar Armazéns* → a sugestão 🌿 aparece no celular. "Distribuímos o público sem passar por cima da escolha de ninguém." |
-| 2:20–2:45 | **Custo:** algoritmo primeiro, IA só na conversa. Cerca de R$ 900 para 100 mil pessoas, contra uns R$ 20 mil com orientadores humanos. Pode ser bancado por patrocínio ESG. |
+| 2:20–2:45 | **Custo:** algoritmo primeiro, IA só na conversa. Cerca de R$ 3 mil para 100 mil pessoas, contra uns R$ 20 mil com orientadores humanos. Pode ser bancado por patrocínio ESG. |
 | 2:45–3:00 | **Fechamento:** "Substituímos barreiras de pedra por pontes de dados. Validamos hoje no almoço com quem estava por aqui." |
 
 ## Extras para 5 minutos

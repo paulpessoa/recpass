@@ -1,11 +1,11 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI, type Content, type Part } from "@google/genai";
 import { TOOL_DEFS, runTool, systemPrompt, type AgentCard, type AgentContext } from "@/lib/agent-tools";
 import { fallbackReply } from "@/lib/agent-fallback";
 import type { Profile } from "@/lib/engine";
 import { getState } from "@/lib/server-store";
 
-// Modelo mais barato da família: o agente só conversa e chama ferramentas determinísticas.
-const MODEL = "claude-haiku-5-5";
+// Modelo rápido e barato: o agente só conversa e chama ferramentas determinísticas.
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
 type Body = {
   messages: { role: "user" | "assistant"; content: string }[];
@@ -14,6 +14,8 @@ type Body = {
   voice?: boolean;
 };
 
+const functionDeclarations = TOOL_DEFS.map((t) => ({ name: t.name, description: t.description, parametersJsonSchema: t.parameters }));
+
 export async function POST(request: Request) {
   const body = (await request.json()) as Body;
   const ctx: AgentContext = { state: await getState(), profile: body.profile, venueId: body.venueId };
@@ -21,49 +23,51 @@ export async function POST(request: Request) {
 
   // Roteador econômico: intenção óbvia (rota, banheiro, embarque…) = algoritmo puro, custo zero.
   const cheap = fallbackReply(lastUser, ctx);
-  if (!process.env.ANTHROPIC_API_KEY || (cheap.confident && body.messages.length <= 2)) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey || (cheap.confident && body.messages.length <= 2)) {
     return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras" });
   }
 
-  const client = new Anthropic();
+  const ai = new GoogleGenAI({ apiKey });
   const cards: AgentCard[] = [];
-  const messages: Anthropic.MessageParam[] = body.messages.slice(-12).map((m) => ({ role: m.role, content: m.content }));
+  const contents: Content[] = body.messages.slice(-12).map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
 
   try {
     for (let i = 0; i < 5; i++) {
-      const response = await client.messages.create({
+      const response = await ai.models.generateContent({
         model: MODEL,
-        max_tokens: 2000,
-        output_config: { effort: "low" },
-        system: systemPrompt(ctx, body.voice),
-        tools: TOOL_DEFS,
-        messages,
+        contents,
+        config: {
+          systemInstruction: systemPrompt(ctx, body.voice),
+          tools: [{ functionDeclarations }],
+          maxOutputTokens: 1500,
+        },
       });
 
-      if (response.stop_reason === "refusal") break;
-
-      if (response.stop_reason !== "tool_use") {
-        const text = response.content
-          .filter((b): b is Anthropic.TextBlock => b.type === "text")
-          .map((b) => b.text)
-          .join("\n")
-          .trim();
-        return Response.json({ text, cards: dedupe(cards), mode: "ia", usage: response.usage });
+      const calls = response.functionCalls ?? [];
+      if (!calls.length) {
+        const text = (response.text ?? "").trim();
+        if (!text) break;
+        return Response.json({ text, cards: dedupe(cards), mode: "ia", usage: response.usageMetadata });
       }
 
-      messages.push({ role: "assistant", content: response.content });
-      const results: Anthropic.ToolResultBlockParam[] = response.content
-        .filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use")
-        .map((b) => ({
-          type: "tool_result",
-          tool_use_id: b.id,
-          content: runTool(b.name, (b.input ?? {}) as Record<string, unknown>, ctx, cards),
-        }));
-      messages.push({ role: "user", content: results });
+      // Devolve o conteúdo do modelo como veio (preserva as thought signatures) + as respostas das ferramentas.
+      const modelContent = response.candidates?.[0]?.content;
+      if (modelContent) contents.push(modelContent);
+      const parts: Part[] = calls.map((c) => ({
+        functionResponse: {
+          id: c.id,
+          name: c.name,
+          response: { output: runTool(c.name ?? "", (c.args ?? {}) as Record<string, unknown>, ctx, cards) },
+        },
+      }));
+      contents.push({ role: "user", parts });
     }
   } catch (err) {
-    if (err instanceof Anthropic.APIError) console.error("agent api error", err.status, err.message);
-    else throw err;
+    console.error("gemini error", err instanceof Error ? err.message : err);
   }
 
   return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras" });

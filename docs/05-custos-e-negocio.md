@@ -8,10 +8,10 @@
 |---|---|---|
 | Algoritmo no aparelho | rota adaptada, lotação, recomendações, filtros, mapa | **R$ 0** |
 | Roteador econômico | "como chego no Moinho?", "banheiro", "quero ir embora" | **R$ 0** |
-| Agente com IA (Claude Haiku 5.5) | conversa aberta, montar perfil conversando, dúvidas compostas | ~US$ 0,001 por resposta |
+| Agente com IA (Gemini 3.5 Flash-Lite) | conversa aberta, montar perfil conversando, dúvidas compostas | ~US$ 0,003 por resposta |
 | Voz | reconhecimento e fala do navegador | **R$ 0** (o que custa é a IA, e a cota limita o uso) |
 
-O Haiku 5.5 custa US$ 0,10 por milhão de tokens de entrada e US$ 0,50 por milhão de saída. Uma resposta típica usa cerca de 6.500 tokens de entrada (prompt, ferramentas, histórico e resultados) e uns 500 de saída, o que dá **cerca de US$ 0,0009**.
+O Gemini 3.5 Flash-Lite custa US$ 0,30 por milhão de tokens de entrada e US$ 2,50 por milhão de saída (tabela de out/2026), e tem camada gratuita para desenvolvimento e demo. Uma resposta típica usa cerca de 6.500 tokens de entrada (prompt, ferramentas, histórico e resultados) e uns 500 de saída, o que dá **cerca de US$ 0,003**.
 
 ## Cenário: 100 mil participantes em 4 dias
 
@@ -19,8 +19,8 @@ O Haiku 5.5 custa US$ 0,10 por milhão de tokens de entrada e US$ 0,50 por milh�
 |---|---|
 | Usam o agente com IA | 30% (30 mil pessoas) |
 | Respostas de IA por pessoa | 6 |
-| Total | cerca de 180 mil respostas, ≈ **US$ 160 (cerca de R$ 900)** |
-| Pior caso com voz (todos usando a cota inteira) | ≈ US$ 2–4 mil, e a cota é o teto |
+| Total | cerca de 180 mil respostas, ≈ **US$ 580 (cerca de R$ 3,2 mil)** |
+| Pior caso com voz (todos usando a cota inteira) | ≈ US$ 8–14 mil, e a cota é o teto |
 | Infraestrutura (Vercel Pro e Supabase Pro) | ≈ US$ 45 por mês |
 | Tags (300 pontos × R$ 1–2) | ≈ R$ 600 |
 
@@ -30,7 +30,7 @@ O Haiku 5.5 custa US$ 0,10 por milhão de tokens de entrada e US$ 0,50 por milh�
 |---|---|---|
 | 20 orientadores humanos × 10 h × 4 dias × R$ 25/h | ≈ **R$ 20 mil** | 20 pontos fixos, horário limitado |
 | Totens com tela | dezenas de milhares de reais, além do problema com o IPHAN | poucos pontos |
-| **Rota Livre** | ≈ **R$ 2–5 mil** no total | todos os pontos com tag, 24 h, em Libras, por voz e por texto |
+| **Rota Livre** | ≈ **R$ 4–8 mil** no total | todos os pontos com tag, 24 h, em Libras, por voz e por texto |
 
 ## Modelo de receita
 

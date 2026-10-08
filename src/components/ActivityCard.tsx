@@ -11,7 +11,12 @@ export function A11yBadges({ a }: { a: Activity }) {
   if (a.libras) badges.push({ t: "🤟 Libras", c: "bg-indigo-50 text-indigo-700" });
   if (a.audiodescricao) badges.push({ t: "🔊 Audiodescrição", c: "bg-indigo-50 text-indigo-700" });
   if (a.legenda) badges.push({ t: "💬 Legenda", c: "bg-indigo-50 text-indigo-700" });
-  if (a.floor > 1) badges.push(v.elevator ? { t: `🛗 ${a.floor}º andar c/ elevador`, c: "bg-emerald-50 text-emerald-700" } : { t: `🪜 ${a.floor}º andar sem elevador`, c: "bg-red-50 text-red-700" });
+  if (a.floor > 1)
+    badges.push(
+      v.elevator
+        ? { t: `🛗 ${a.floor}º andar · ${(v.vertical ?? ["elevador"]).join(" e ")}`, c: "bg-emerald-50 text-emerald-700" }
+        : { t: `🪜 ${a.floor}º andar sem elevador`, c: "bg-red-50 text-red-700" },
+    );
   if (v.mainEntrance === "rampa") badges.push({ t: "♿ Rampa", c: "bg-emerald-50 text-emerald-700" });
   if (v.mainEntrance === "escada" && v.accessible) badges.push({ t: "↪️ Acesso lateral", c: "bg-amber-50 text-amber-700" });
   if (!v.accessible) badges.push({ t: "⚠️ Prédio sem acessibilidade", c: "bg-red-50 text-red-700" });

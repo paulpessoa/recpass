@@ -40,6 +40,11 @@ export const HERITAGE: Record<string, { title: string; story: string; era?: stri
     story:
       "A Caixa Cultural ocupa um edifício histórico restaurado de frente para o Marco Zero. A entrada é em nível e o piso da Avenida Alfredo Lisboa é liso — um dos trechos mais confortáveis da ilha para quem anda de cadeira de rodas ou com carrinho.",
   },
+  "cais-sertao": {
+    title: "O sertão chegou ao cais",
+    story:
+      "Inaugurado em 2014, o Museu Cais do Sertão ocupa um antigo armazém do porto e conta a cultura do sertão nordestino, com destaque para Luiz Gonzaga, o Rei do Baião. É um museu de experiência: som, imagem e interação. Repare que não há atividades no térreo — o elevador fica à direita da recepção.",
+  },
   moinho: {
     title: "Onde se moía trigo",
     story:

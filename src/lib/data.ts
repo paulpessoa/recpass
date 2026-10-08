@@ -24,6 +24,7 @@ export type Venue = {
   mainEntrance: "nivel" | "rampa" | "escada";
   universalAccess: string; // como chegar ao acesso universal
   amenities: string[];
+  vertical?: string[]; // circulação entre andares
   baseCrowd: number; // 0..1 aglomeração típica do entorno
 };
 
@@ -80,8 +81,9 @@ export const VENUES: Venue[] = [
     accessible: true,
     elevator: true,
     mainEntrance: "escada",
-    universalAccess: "Degraus na entrada da Rua da Alfândega. Acesso em nível pelo Cais da Alfândega (fundos), com elevador.",
-    amenities: ["Elevador", "Praça de alimentação", "Banheiro acessível", "Fraldário"],
+    universalAccess: "Degraus na entrada da Rua da Alfândega. Acesso em nível pelo Cais da Alfândega (fundos); elevador ao lado das escadas rolantes.",
+    amenities: ["Elevador", "Escada rolante", "Praça de alimentação", "Banheiro acessível", "Fraldário"],
+    vertical: ["elevador", "escada rolante"],
     baseCrowd: 0.5,
   },
   {
@@ -113,6 +115,21 @@ export const VENUES: Venue[] = [
     baseCrowd: 0.55,
   },
   {
+    id: "cais-sertao",
+    name: "Museu Cais do Sertão",
+    short: "Cais do Sertão",
+    lat: -8.06455,
+    lng: -34.86995,
+    kind: "polo",
+    accessible: true,
+    elevator: true,
+    mainEntrance: "nivel",
+    universalAccess: "Entrada em nível pela Av. Alfredo Lisboa. Não há atividades no térreo: suba pelo elevador (à direita da recepção) ou pela escada.",
+    amenities: ["Elevador", "Escada", "Ar-condicionado", "Banheiro acessível"],
+    vertical: ["elevador", "escada"],
+    baseCrowd: 0.4,
+  },
+  {
     id: "moinho",
     name: "Moinho Recife",
     short: "Moinho",
@@ -122,8 +139,9 @@ export const VENUES: Venue[] = [
     accessible: true,
     elevator: true,
     mainEntrance: "nivel",
-    universalAccess: "Entrada em nível; estacionamento e embarque de app na frente.",
-    amenities: ["Elevador", "Estacionamento", "Embarque de app", "Banheiro família"],
+    universalAccess: "Entrada em nível pelo pátio. Salas espalhadas em 4 andares e alas diferentes: use os elevadores do hall central (as escadas da ala norte não têm corrimão duplo).",
+    amenities: ["Elevadores", "Escadas", "Estacionamento", "Embarque de app", "Banheiro família"],
+    vertical: ["elevador", "escada"],
     baseCrowd: 0.3,
   },
   {
@@ -310,6 +328,8 @@ export const EDGES: Edge[] = [
   { a: "j-alfredo-m", b: "j-alfredo-s", street: "Av. Alfredo Lisboa", surface: "asfalto" },
   { a: "j-alfredo-s", b: "caixa", street: "Av. Alfredo Lisboa", surface: "asfalto" },
   { a: "caixa", b: "marco-zero", street: "Praça Rio Branco", surface: "asfalto" },
+  { a: "caixa", b: "cais-sertao", street: "Av. Alfredo Lisboa", surface: "asfalto" },
+  { a: "marco-zero", b: "cais-sertao", street: "Praça Rio Branco → Cais", surface: "asfalto" },
   { a: "malakoff", b: "paco-frevo", street: "Praça do Arsenal", surface: "paralelepipedo" },
   { a: "j-alfredo-s", b: "paco-frevo", street: "Rua da Guia (calçada rebaixada)", surface: "asfalto" },
   { a: "senai", b: "j-alfredo-n", street: "Rua Mariz e Barros", surface: "paralelepipedo" },
@@ -362,8 +382,16 @@ export const ACTIVITIES: Activity[] = [
   // Moinho
   { id: "a19", title: "Hardware hacking: IoT para cidades", venueId: "moinho", room: "Galpão A", floor: 1, start: "10:00", durationMin: 120, capacity: 60, popularity: 0.7, track: "Tecnologia", topics: ["hardware", "cidades", "dev"], format: "Workshop" },
   { id: "a20", title: "IA para pequenos negócios", venueId: "moinho", room: "Palco Moinho", floor: 1, start: "13:30", durationMin: 60, capacity: 300, popularity: 0.75, track: "Negócios", topics: ["ia", "negocios", "iniciante"], format: "Palestra", libras: true, legenda: true },
-  { id: "a21", title: "Agentes de IA: casos reais no Nordeste", venueId: "moinho", room: "Palco Moinho", floor: 1, start: "15:00", durationMin: 60, capacity: 300, popularity: 0.6, track: "Tecnologia", topics: ["ia", "dev", "startups"], format: "Painel", libras: true, legenda: true },
-  { id: "a22", title: "Pitch night: startups da região", venueId: "moinho", room: "Palco Moinho", floor: 1, start: "18:00", durationMin: 90, capacity: 300, popularity: 0.85, track: "Negócios", topics: ["startups", "investimento", "negocios"], format: "Experiência", libras: true },
+  { id: "a21", title: "Agentes de IA: casos reais no Nordeste", venueId: "moinho", room: "Sala Silo (ala sul)", floor: 3, start: "15:00", durationMin: 60, capacity: 120, popularity: 0.6, track: "Tecnologia", topics: ["ia", "dev", "startups"], format: "Painel", libras: true, legenda: true },
+  { id: "a22", title: "Pitch night: startups da região", venueId: "moinho", room: "Terraço", floor: 4, start: "18:00", durationMin: 90, capacity: 300, popularity: 0.85, track: "Negócios", topics: ["startups", "investimento", "negocios"], format: "Experiência", libras: true },
+  { id: "a31", title: "UX acessível: testes com usuários reais", venueId: "moinho", room: "Sala Trigo (ala norte)", floor: 2, start: "15:30", durationMin: 60, capacity: 50, popularity: 0.55, track: "Tecnologia", topics: ["ux", "acessibilidade", "design"], format: "Workshop", libras: true, legenda: true },
+  { id: "a32", title: "Mobilidade urbana com dados abertos", venueId: "moinho", room: "Sala Silo (ala sul)", floor: 3, start: "16:30", durationMin: 60, capacity: 120, popularity: 0.5, track: "Cidades", topics: ["mobilidade", "dados", "cidades"], format: "Palestra", legenda: true },
+  // Cais do Sertão — nada no térreo
+  { id: "a33", title: "Sertão conectado: internet e agro no interior", venueId: "cais-sertao", room: "Auditório", floor: 2, start: "14:00", durationMin: 60, capacity: 90, popularity: 0.7, track: "Negócios", topics: ["negocios", "dados", "comunidade"], format: "Painel", libras: true },
+  { id: "a34", title: "Exposição imersiva: o som do sertão em XR", venueId: "cais-sertao", room: "Galeria 3", floor: 3, start: "10:00", durationMin: 540, capacity: 60, popularity: 0.8, track: "Economia Criativa", topics: ["xr", "musica", "cultura", "patrimonio"], format: "Experiência", audiodescricao: true },
+  { id: "a35", title: "Economia criativa nordestina: do forró ao streaming", venueId: "cais-sertao", room: "Auditório", floor: 2, start: "16:00", durationMin: 60, capacity: 90, popularity: 0.85, track: "Economia Criativa", topics: ["musica", "cultura", "negocios", "criatividade"], format: "Palestra", libras: true, legenda: true },
+  // Paço Alfândega — 3º andar
+  { id: "a36", title: "Fintechs do Nordeste", venueId: "paco-alfandega", room: "Auditório", floor: 3, start: "14:30", durationMin: 60, capacity: 120, popularity: 0.75, track: "Negócios", topics: ["negocios", "investimento", "startups"], format: "Painel", legenda: true },
   // Armazéns
   { id: "a23", title: "Accenture: IA responsável em grandes empresas", venueId: "armazens", room: "Armazém 14", floor: 1, start: "11:00", durationMin: 60, capacity: 180, popularity: 0.9, track: "Tecnologia", topics: ["ia", "dados", "negocios"], format: "Palestra", legenda: true, libras: true },
   { id: "a24", title: "Carreira internacional remota", venueId: "armazens", room: "Armazém 14", floor: 1, start: "15:00", durationMin: 60, capacity: 180, popularity: 0.85, track: "Negócios", topics: ["carreira", "dev", "negocios"], format: "Painel", legenda: true },
@@ -588,6 +616,10 @@ export const TAGS: TagPoint[] = [
   { id: "paco-frevo", venueId: "paco-frevo", label: "Paço do Frevo — Entrada", kind: "entrada" },
   { id: "cesar", venueId: "cesar", label: "CESAR School — Entrada", kind: "entrada" },
   { id: "moinho", venueId: "moinho", label: "Moinho Recife — Entrada", kind: "entrada" },
+  { id: "moinho-andar-2", venueId: "moinho", label: "Moinho — 2º andar (Sala Trigo, ala norte)", kind: "sala", floor: 2 },
+  { id: "moinho-andar-3", venueId: "moinho", label: "Moinho — 3º andar (Sala Silo, ala sul)", kind: "sala", floor: 3 },
+  { id: "cais-sertao", venueId: "cais-sertao", label: "Cais do Sertão — Recepção (térreo)", kind: "entrada", note: "Não há atividades no térreo: elevador à direita da recepção." },
+  { id: "paco-alfandega-3", venueId: "paco-alfandega", label: "Paço Alfândega — 3º andar (Auditório)", kind: "sala", floor: 3 },
   { id: "caixa", venueId: "caixa", label: "Caixa Cultural — Entrada", kind: "entrada" },
   { id: "armazens", venueId: "armazens", label: "Armazéns do Porto — Entrada", kind: "entrada" },
   { id: "casa-zero", venueId: "casa-zero", label: "Casa Zero — Entrada", kind: "entrada" },

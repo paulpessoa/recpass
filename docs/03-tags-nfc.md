@@ -14,6 +14,15 @@ Cada tag recebe apenas `https://<domínio>/t/<id>`. O que esse ID representa (lo
 - **Qualquer celular:** use o app **NFC Tools**: *Escrever → Adicionar registro → URL* e cole o link copiado em `/tags`.
 - **Na POC, não tranque as tags** (lock), para poder regravar. Em produção, proteja com senha ou tranque, porque uma tag em espaço público pode ser sobrescrita.
 
+## Elas continuam regraváveis?
+
+**Sim**, enquanto ninguém trancar:
+- A NTAG213 aceita cerca de **100 mil gravações**, e gravar uma URL nova simplesmente substitui a anterior.
+- A página `/tags` só **grava**; ela nunca tranca a tag. A Web NFC tem uma função `makeReadOnly()`, mas não usamos.
+- **O que deixa a tag permanentemente só leitura:** no NFC Tools, *Outras → Bloquear tag* ("Lock tag"). **É irreversível**, então não use na POC.
+- **Meio-termo para produção:** *Outras → Definir senha* no NFC Tools. A tag continua legível por qualquer celular, mas só grava quem tiver a senha. A senha pode ser removida depois.
+- Mesmo trancada, a tag continua útil, porque o significado do ID fica no servidor (ver acima).
+
 ## Leitura
 
 - iPhone XS ou mais novo lê em segundo plano, com a tela desbloqueada.
@@ -26,6 +35,8 @@ Cada tag recebe apenas `https://<domínio>/t/<id>`. O que esse ID representa (lo
 |---|---|---|
 | `nerd-terreo`, `nerd-andar-2`, `nerd-andar-3`, `nerd-auditorio` | NERD (4 andares, onde acontece o ideathon) | entrada e salas |
 | `paco-frevo`, `cesar`, `moinho`, `caixa`, `armazens`, `casa-zero`, `marco-zero` | Polos do festival | entrada |
+| `moinho-andar-2`, `moinho-andar-3`, `paco-alfandega-3` | Salas em andares e alas diferentes (elevador, escada, escada rolante) | sala |
+| `cais-sertao` | Recepção do Cais do Sertão (sem atividades no térreo; indica o elevador) | entrada |
 | `paco-alfandega-escadaria`, `porto-fachada`, `senai` | Fachadas tombadas com escadaria | ponto cego, indica o acesso universal |
 | `embarque-norte`, `embarque-sul` | Pontos de embarque de app/táxi | embarque |
 | `encontro-1` | Ponto de encontro do grupo | encontro |

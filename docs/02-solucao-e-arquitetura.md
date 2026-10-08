@@ -33,7 +33,7 @@ flowchart LR
   Org[Painel /org] -->|destaques, relógio| State
   App -->|perguntas abertas| Agent[/api/agent/]
   Agent -->|tool use| Engine[Motor determinístico<br/>rotas, lotação, recomendações]
-  Agent -->|só conversa| Haiku[Claude Haiku 5.5]
+  Agent -->|só conversa| Gemini[Gemini 3.5 Flash-Lite]
   App -->|offline / intenção óbvia| Engine
 ```
 
@@ -49,7 +49,7 @@ flowchart LR
 ### Agente (`src/app/api/agent`)
 
 1. **Roteador econômico:** se a intenção é óbvia (rota até um local, banheiro ou fraldário, ir embora), quem responde é `agent-fallback.ts`, sem IA.
-2. **Senão:** o Claude Haiku 5.5, com esforço baixo e 4 ferramentas (`recomendar_atividades`, `buscar_atividades`, `calcular_rota`, `status_local`). **A IA nunca inventa vagas nem rotas: ela consulta o motor.**
+2. **Senão:** o Gemini 3.5 Flash-Lite (configurável por `GEMINI_MODEL`), com chamada de função e 4 ferramentas (`recomendar_atividades`, `buscar_atividades`, `calcular_rota`, `status_local`). **A IA nunca inventa vagas nem rotas: ela consulta o motor.**
 3. **Sem internet ou sem chave:** as regras rodam no próprio navegador.
 
 ### Voz e acessibilidade

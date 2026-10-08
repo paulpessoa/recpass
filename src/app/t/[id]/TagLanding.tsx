@@ -102,6 +102,13 @@ export function TagLanding({ id }: { id: string }) {
         </section>
       )}
 
+      {tag.note && tag.kind !== "escadaria" && (
+        <section className="mb-4 rounded-2xl bg-sky-50 p-4 text-sm text-sky-900 ring-1 ring-sky-200">
+          ℹ️ {tag.note}
+          {venue.vertical && <span className="mt-1 block text-xs text-sky-800">Circulação: {venue.vertical.join(", ")}.</span>}
+        </section>
+      )}
+
       {tag.kind === "escadaria" && (
         <section className="mb-4 rounded-2xl border-2 border-amber-400 bg-amber-50 p-4">
           <h2 className="font-bold text-amber-900">⚠️ Esta entrada tem degraus</h2>
