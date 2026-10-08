@@ -5,7 +5,7 @@ import { useState, useSyncExternalStore } from "react";
 import { TAGS, venueById } from "@/lib/data";
 
 type NDEFReaderLike = {
-  write: (msg: { records: { recordType: string; data: string }[] }) => Promise<void>;
+  write: (msg: { records: { recordType: string; data?: string }[] }) => Promise<void>;
   scan: () => Promise<void>;
   onreading: ((e: { serialNumber: string; message: { records: { recordType: string; data?: DataView }[] } }) => void) | null;
 };
@@ -28,6 +28,19 @@ export default function TagsPage() {
     try {
       await reader().write({ records: [{ recordType: "url", data: url }] });
       setStatus(`✅ Tag gravada: ${url}`);
+    } catch (e) {
+      setStatus(`❌ Falhou: ${(e as Error).message}`);
+    } finally {
+      setWriting(null);
+    }
+  }
+
+  async function clear() {
+    setWriting("__clear__");
+    setStatus("Encoste a tag no celular para apagar o conteúdo…");
+    try {
+      await reader().write({ records: [{ recordType: "empty" }] });
+      setStatus("🧹 Tag limpa. Ela está vazia e pronta para ser gravada de novo.");
     } catch (e) {
       setStatus(`❌ Falhou: ${(e as Error).message}`);
     } finally {
@@ -65,9 +78,14 @@ export default function TagsPage() {
         {nfc ? (
           <>
             <b>Web NFC disponível.</b> Toque em &quot;Gravar&quot; e encoste a tag nas costas do celular.
-            <button onClick={scan} className="ml-2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white">
-              Ler uma tag
-            </button>
+            <span className="mt-2 flex flex-wrap gap-2">
+              <button onClick={scan} className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white">
+                Ler uma tag
+              </button>
+              <button onClick={clear} disabled={!!writing} className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white disabled:opacity-50">
+                {writing === "__clear__" ? "Aproxime…" : "🧹 Limpar tag"}
+              </button>
+            </span>
           </>
         ) : (
           <>
