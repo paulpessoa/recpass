@@ -8,7 +8,7 @@
 |---|---|
 | App em produção | https://recpass.vercel.app (deploy automático a cada push na `main`) |
 | Código | github.com/paulpessoa/recpass (público) · pasta local `ideathon/rota-livre` (o nome antigo ficou na pasta) |
-| Banco | Supabase, projeto **recpass**: tabelas `festival_settings`, `venue_boosts` e `tag_taps`. A integração com o GitHub aplica as migrações da `main` |
+| Banco | Supabase, projeto **recpass**: tabelas `festival_settings`, `venue_boosts`, `tag_taps` e `app_feedback` (pesquisa dos testes). A integração com o GitHub aplica as migrações da `main` |
 | IA | **OpenAI `gpt-4.1-mini`** (troque com `OPENAI_MODEL`), chave `OPENAI_API_KEY` na Vercel e no `.env.local`. O Gemini continua como alternativa automática quando não há chave da OpenAI (`src/lib/llm.ts`) |
 | Slides do pitch | Artifact "RecPass — Pitch Ideathon P&D" no claude.ai (13 slides, roteiro nas notas) |
 | Docs | `docs/01`–`08`: pesquisa, arquitetura, tags, painel, custos, pitch, roadmap, inspirações |
@@ -24,6 +24,7 @@
 - **Voz:** chamada flutuante com cota de 3 min a cada 2 h (controlada no navegador). O VLibras foi removido por enquanto.
 - **Painel `/org`:** mapa de calor, destaque de polos vazios (só reordena o que já combina com o perfil), auto-equilíbrio, check-ins ao vivo e relógio da simulação.
 - **Tags `/tags`:** gravar, ler e **limpar** pelo Chrome Android. As NTAG213 são regraváveis; nunca use "Bloquear tag" no NFC Tools.
+- **Feedback (`app_feedback`):** botão 📝 em todas as telas do app; o pop-up abre sozinho uma vez após ~2,5 min de uso, ou direto com `?feedback=1` (ex.: `/t/nerd-terreo?feedback=1`). Nota 1–5 obrigatória; NPS, "usaria?", destaques, o que faltou, área e contato opcional com consentimento. Ler no Table Editor do Supabase (não há leitura pública: o repositório é aberto).
 - **PWA:** instalável, abre sem internet. O app **não usa GPS**: a posição vem da última tag lida.
 
 ## Decisões tomadas (e o porquê)

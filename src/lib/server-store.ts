@@ -133,3 +133,44 @@ export async function applyAction(action: StateAction): Promise<SharedState> {
     return applyMem(action);
   }
 }
+
+// ---------- Feedback dos testes com profissionais ----------
+
+export type Feedback = {
+  rating: number;
+  recommend: number | null;
+  wouldUse: "sim" | "talvez" | "nao" | null;
+  liked: string[];
+  missing: string | null;
+  area: string | null;
+  role: string | null;
+  name: string | null;
+  contact: string | null;
+  canContact: boolean;
+  context: Record<string, unknown>;
+};
+
+const gf = globalThis as unknown as { __recpassFeedback?: (Feedback & { at: number })[] };
+
+export async function saveFeedback(fb: Feedback): Promise<"supabase" | "memoria"> {
+  const sb = supabase();
+  if (sb) {
+    const { error } = await sb.from("app_feedback").insert({
+      rating: fb.rating,
+      recommend: fb.recommend,
+      would_use: fb.wouldUse,
+      liked: fb.liked,
+      missing: fb.missing,
+      area: fb.area,
+      role: fb.role,
+      name: fb.name,
+      contact: fb.contact,
+      can_contact: fb.canContact,
+      context: fb.context,
+    });
+    if (!error) return "supabase";
+    console.error("supabase feedback insert failed, usando memória", error);
+  }
+  (gf.__recpassFeedback ??= []).unshift({ ...fb, at: Date.now() });
+  return "memoria";
+}

@@ -6,6 +6,7 @@ import { MOBILITY_LABEL, venueById } from "@/lib/data";
 import { useLocation, useMounted, useProfile, useShared } from "@/lib/client";
 import { festivalNow, fmtMin, profileMobility } from "@/lib/engine";
 import { VoiceCall } from "./VoiceCall";
+import { FeedbackPrompt } from "./FeedbackPrompt";
 
 const NAV = [
   { href: "/", label: "Agora", icon: "⚡" },
@@ -60,6 +61,7 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
       </main>
 
       {mounted && <VoiceCall />}
+      {mounted && <FeedbackPrompt />}
 
       <nav className="fixed inset-x-0 bottom-0 z-[1000] mx-auto max-w-md border-t border-black/5 bg-white/95 backdrop-blur">
         <ul className="grid grid-cols-4">
