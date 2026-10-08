@@ -137,7 +137,7 @@ export function VoiceCall() {
       {open && (
         <div className="fixed inset-0 z-[2000] flex flex-col items-center justify-between bg-gradient-to-b from-[#0b1f4d] to-[#123b8c] px-6 py-10 text-white">
           <div className="text-center">
-            <p className="text-xs uppercase tracking-widest text-white/60">Rota Livre · chamada</p>
+            <p className="text-xs uppercase tracking-widest text-white/60">RecPass · chamada</p>
             <p className="mt-1 font-mono text-sm text-white/80">{remainingMs <= 0 && !active.current ? "sem minutos" : `${fmt(left)} restantes`}</p>
           </div>
 

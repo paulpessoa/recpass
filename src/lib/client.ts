@@ -107,8 +107,8 @@ function localStore<T>(key: string) {
   return { read, write, subscribe };
 }
 
-const profileStore = localStore<Profile>("rota-livre:profile");
-const locationStore = localStore<{ venueId: string; tagId?: string; at: number }>("rota-livre:location");
+const profileStore = localStore<Profile>("recpass:profile");
+const locationStore = localStore<{ venueId: string; tagId?: string; at: number }>("recpass:location");
 
 export function useProfile() {
   const profile = useSyncExternalStore(profileStore.subscribe, profileStore.read, () => null);
@@ -122,7 +122,7 @@ export function useLocation() {
   return [loc, setLoc] as const;
 }
 
-const guideStore = localStore<boolean>("rota-livre:guide");
+const guideStore = localStore<boolean>("recpass:guide");
 
 /** Modo guia (histórias dos prédios na leitura da tag). Ligado por padrão. */
 export function useGuide() {
@@ -136,7 +136,7 @@ export function useGuide() {
 export const VOICE_QUOTA_MS = 3 * 60 * 1000; // 3 minutos…
 export const VOICE_WINDOW_MS = 2 * 60 * 60 * 1000; // …a cada 2 horas, por pessoa
 
-const voiceStore = localStore<{ at: number; ms: number }[]>("rota-livre:voice-usage");
+const voiceStore = localStore<{ at: number; ms: number }[]>("recpass:voice-usage");
 
 export function useVoiceQuota() {
   const usage = useSyncExternalStore(voiceStore.subscribe, voiceStore.read, () => null) ?? [];

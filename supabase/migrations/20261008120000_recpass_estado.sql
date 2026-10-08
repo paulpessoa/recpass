@@ -1,4 +1,4 @@
--- Rota Livre: estado compartilhado entre o painel da organização e os apps dos participantes.
+-- RecPass: estado compartilhado entre o painel da organização e os apps dos participantes.
 -- Acesso só pelo servidor (service role). RLS ligado e sem policies = anon não lê nem escreve.
 
 create table public.festival_settings (

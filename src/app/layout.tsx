@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rota Livre — REC'n'Play",
+  title: "RecPass — REC'n'Play",
   description: "Check-in de contexto via NFC + agente de mobilidade e acessibilidade para o Bairro do Recife.",
 };
 

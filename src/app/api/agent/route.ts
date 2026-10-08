@@ -23,10 +23,11 @@ export async function POST(request: Request) {
 
   // Roteador econômico: intenção óbvia (rota, banheiro, embarque…) = algoritmo puro, custo zero.
   const cheap = fallbackReply(lastUser, ctx);
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey || (cheap.confident && body.messages.length <= 2)) {
-    return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras" });
+    return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras", reason: apiKey ? "intencao-clara" : "sem-chave" });
   }
+  let reason = "limite-de-voltas";
 
   const ai = new GoogleGenAI({ apiKey });
   const cards: AgentCard[] = [];
@@ -49,8 +50,14 @@ export async function POST(request: Request) {
 
       const calls = response.functionCalls ?? [];
       if (!calls.length) {
-        const text = (response.text ?? "").trim();
-        if (!text) break;
+        const text = (response.candidates?.[0]?.content?.parts ?? [])
+          .map((p) => p.text ?? "")
+          .join("")
+          .trim();
+        if (!text) {
+          reason = `sem-texto (${response.candidates?.[0]?.finishReason ?? "?"})`;
+          break;
+        }
         return Response.json({ text, cards: dedupe(cards), mode: "ia", usage: response.usageMetadata });
       }
 
@@ -67,10 +74,11 @@ export async function POST(request: Request) {
       contents.push({ role: "user", parts });
     }
   } catch (err) {
-    console.error("gemini error", err instanceof Error ? err.message : err);
+    reason = `erro: ${err instanceof Error ? err.message.slice(0, 200) : String(err)}`;
+    console.error("gemini error", reason);
   }
 
-  return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras" });
+  return Response.json({ text: cheap.text, cards: cheap.cards, mode: "regras", reason });
 }
 
 function dedupe(cards: AgentCard[]) {

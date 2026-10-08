@@ -27,7 +27,7 @@ export function TagLanding({ id }: { id: string }) {
     setLoc(venue.id, tag.id);
     let who: string | undefined;
     try {
-      who = (JSON.parse(localStorage.getItem("rota-livre:profile") ?? "null") as { name?: string } | null)?.name;
+      who = (JSON.parse(localStorage.getItem("recpass:profile") ?? "null") as { name?: string } | null)?.name;
     } catch {}
     act({ type: "tap", tag: tag.id, who });
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);

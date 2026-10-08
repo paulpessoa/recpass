@@ -1,4 +1,4 @@
-# Rota Livre — POC Ideathon P&D / REC'n'Play
+# RecPass — POC Ideathon P&D / REC'n'Play
 
 Check-in de contexto por **tag NFC** + agente de mobilidade e acessibilidade para o Bairro do Recife.
 

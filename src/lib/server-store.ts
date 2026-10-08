@@ -25,8 +25,8 @@ export const storageMode = () => (supabase() ? "supabase" : "memoria");
 
 // ---------- Memória ----------
 
-const g = globalThis as unknown as { __rotaLivreState?: SharedState };
-const mem = () => (g.__rotaLivreState ??= initialState());
+const g = globalThis as unknown as { __recpassState?: SharedState };
+const mem = () => (g.__recpassState ??= initialState());
 
 function applyMem(action: StateAction): SharedState {
   const s = mem();
@@ -50,7 +50,7 @@ function applyMem(action: StateAction): SharedState {
       s.nudges += 1;
       break;
     case "reset":
-      g.__rotaLivreState = initialState();
+      g.__recpassState = initialState();
       break;
   }
   return mem();

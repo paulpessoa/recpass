@@ -182,7 +182,7 @@ export function systemPrompt(ctx: AgentContext, voice = false) {
   const p = ctx.profile;
   const arch = ARCHETYPES.find((a) => a.id === p?.archetypeId);
   const here = ctx.venueId ? venueById(ctx.venueId) : null;
-  return `Você é o Rota Livre, concierge de mobilidade e acessibilidade do festival REC'n'Play, no Bairro do Recife (Recife Antigo).
+  return `Você é o RecPass, concierge de mobilidade e acessibilidade do festival REC'n'Play, no Bairro do Recife (Recife Antigo).
 Ruas históricas de paralelepípedo, prédios tombados pelo IPHAN (escadarias na fachada, rampas escondidas nas laterais), pontes bloqueadas pela CTTU e multidões são o contexto do dia a dia aqui.
 
 Como responder:

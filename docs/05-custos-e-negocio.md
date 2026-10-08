@@ -30,7 +30,7 @@ O Gemini 3.5 Flash-Lite custa US$ 0,30 por milhão de tokens de entrada e US$ 2,
 |---|---|---|
 | 20 orientadores humanos × 10 h × 4 dias × R$ 25/h | ≈ **R$ 20 mil** | 20 pontos fixos, horário limitado |
 | Totens com tela | dezenas de milhares de reais, além do problema com o IPHAN | poucos pontos |
-| **Rota Livre** | ≈ **R$ 4–8 mil** no total | todos os pontos com tag, 24 h, em Libras, por voz e por texto |
+| **RecPass** | ≈ **R$ 4–8 mil** no total | todos os pontos com tag, 24 h, em Libras, por voz e por texto |
 
 ## Modelo de receita
 

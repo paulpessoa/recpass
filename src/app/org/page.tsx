@@ -53,7 +53,7 @@ export default function OrgPage() {
         <div className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f26b1d] font-black">R</span>
           <div>
-            <h1 className="font-bold leading-tight">Painel da Organização · Rota Livre</h1>
+            <h1 className="font-bold leading-tight">Painel da Organização · RecPass</h1>
             <p className="text-xs text-white/60">Distribuição de fluxo em tempo real · REC&apos;n&apos;Play · Bairro do Recife</p>
           </div>
         </div>

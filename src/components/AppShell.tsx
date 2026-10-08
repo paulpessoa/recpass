@@ -28,7 +28,7 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
           <Link href="/" className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-full bg-[#f26b1d] text-base font-black">R</span>
             <span className="leading-tight">
-              <span className="block text-sm font-bold">Rota Livre</span>
+              <span className="block text-sm font-bold">RecPass</span>
               <span className="block text-[10px] opacity-80">REC&apos;n&apos;Play · Bairro do Recife</span>
             </span>
           </Link>

@@ -1,4 +1,4 @@
-# Documentação — Rota Livre
+# Documentação — RecPass
 
 POC criada no **Ideathon P&D Design 2026** (CESAR + Porto Digital, NERD, 7 e 8/out/2026), no Desafio 4 (Mobilidade) cruzado com o Desafio 3 (Acessibilidade). O Demoday é no REC'n'Play 2026, de 11 a 14/nov.
 

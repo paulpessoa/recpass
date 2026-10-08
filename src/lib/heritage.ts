@@ -63,7 +63,7 @@ export const HERITAGE: Record<string, { title: string; story: string; era?: stri
   senai: {
     title: "Um prédio que ainda não recebe todos",
     story:
-      "Este prédio histórico ainda não tem rampa nem elevador. Em vez de esconder isso, o Rota Livre avisa antes — e oferece a transmissão ao vivo, com Libras, nos Armazéns do Porto, a poucos minutos por piso liso.",
+      "Este prédio histórico ainda não tem rampa nem elevador. Em vez de esconder isso, o RecPass avisa antes — e oferece a transmissão ao vivo, com Libras, nos Armazéns do Porto, a poucos minutos por piso liso.",
   },
   "casa-zero": {
     title: "Inovação de porta aberta",
