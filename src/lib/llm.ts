@@ -49,7 +49,7 @@ export async function runOpenAI(system: string, history: ChatTurn[], ctx: AgentC
 }
 
 export async function runGemini(system: string, history: ChatTurn[], ctx: AgentContext, cards: AgentCard[]): Promise<LlmResult | null> {
-  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+  const model = process.env.GEMINI_MODEL || "gemini-3.8-flash-lite";
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY!.trim() });
   const functionDeclarations = TOOL_DEFS.map((t) => ({ name: t.name, description: t.description, parametersJsonSchema: t.parameters }));
   const contents: Content[] = history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] }));
